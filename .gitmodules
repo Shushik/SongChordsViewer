@@ -1,0 +1,3 @@
+[submodule "SongChordsParser"]
+	path = SongChordsParser
+	url = https://github.com/Shushik/SongChordsParser
