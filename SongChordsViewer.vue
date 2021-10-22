@@ -39,7 +39,7 @@
                 >
                     <template v-for="line in verse.lines">
                         <div
-                            v-if="line.type == 'repeat'"
+                            v-if="line.type == REPEAT_ALIAS"
                             class="song__repeat"
                         >
                             <span class="song__label">repeat {{ line.times }}:</span><br/>

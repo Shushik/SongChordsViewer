@@ -108,7 +108,7 @@ export default {
                 root.innerHTML = '';
 
                 this.song.chords = chords.map((chord) => {
-                    if (!collection[chord]) {
+                    if (!this.chords[chord]) {
                         return;
                     }
 
@@ -116,7 +116,7 @@ export default {
                         root,
                         tune,
                         title: chord.replace(/(_\S+)/, ''),
-                        chord: collection[chord]
+                        chord: this.chords[chord]
                     });
                 });
             }
