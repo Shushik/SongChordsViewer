@@ -80,7 +80,7 @@ export default {
             api.clear();
 
             this.$emit(SONG_VIEWER_EVENT_CLEARED);
-        }
+        },
 
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
