@@ -41,6 +41,11 @@ export default {
         'chords'
     ],
 
+    emits: [
+        SONG_VIEWER_EVENT_PARSED,
+        SONG_VIEWER_EVENT_CLEARED
+    ],
+
     components: {
         SongChordsViewerLine
     },
@@ -52,14 +57,11 @@ export default {
             SPACER_ALIAS,
             VERSE_TYPE_DEFAULT,
             AUTHOR_TYPE_DEFAULT,
+            SONG_VIEWER_EVENT_CLEAR,
+            SONG_VIEWER_EVENT_PARSE,
 
             song: null
         };
-    },
-
-    created() {
-        this.$on(SONG_VIEWER_EVENT_CLEAR, this.clear);
-        this.$on(SONG_VIEWER_EVENT_PARSE, this.parse);
     },
 
     mounted() {
@@ -120,6 +122,14 @@ export default {
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
+        },
+
+        [SONG_VIEWER_EVENT_CLEAR]() {
+            this.clear()
+        },
+
+        [SONG_VIEWER_EVENT_PARSE](raw) {
+            this.parse(raw);
         }
 
     }
