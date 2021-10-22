@@ -21,8 +21,10 @@ import SongChordsViewerLine from './line/line.vue';
 
 const MODULE_ID = 'song-chords-viewer';
 
+export const SONG_VIEWER_EVENT_CLEAR = `${MODULE_ID}-clear`;
 export const SONG_VIEWER_EVENT_PARSE = `${MODULE_ID}-parse`;
 export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
+export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
 
 const DEFAULT_TUNE = ['E', 'B', 'G', 'D', 'A', 'E'];
 
@@ -56,6 +58,7 @@ export default {
     },
 
     created() {
+        this.$on(SONG_VIEWER_EVENT_CLEAR, this.clear);
         this.$on(SONG_VIEWER_EVENT_PARSE, this.parse);
     },
 
@@ -66,6 +69,18 @@ export default {
     },
 
     methods: {
+
+        clear() {
+            let root = this.$refs.chords;
+
+            this.song = null;
+
+            root.innerHTML = '';
+
+            api.clear();
+
+            this.$emit(SONG_VIEWER_EVENT_CLEARED);
+        }
 
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
@@ -110,4 +125,3 @@ export default {
     }
 
 }
-
