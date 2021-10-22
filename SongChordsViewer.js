@@ -99,9 +99,9 @@ export default {
 
             this.song = {
                 title,
-                chords: chords.slice(),
-                verses: verses.slice(),
-                authors: authorsGroupedByType.slice()
+                chords: chords,
+                verses: verses,
+                authors: authorsGroupedByType
             };
 
             if (chords && chords.length && root && this.chords) {

@@ -5,7 +5,7 @@
         :class="{
             'song__chord_is_alone': alone
         }"
-    >{{ slice.value }}</span>
+    >{{ value }}</span>
     <span
         v-else-if="type == SPACER_ALIAS"
         class="song__space"
