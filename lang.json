@@ -1,0 +1,48 @@
+{
+    "en": {
+        "verse": {
+            "coda": "Coda",
+            "note": "Note",
+            "intro": "Intro",
+            "verse": "Verse",
+            "chorus": "Chorus",
+            "bridge": "Bridge",
+            "asterism": "Asterism",
+            "epigraph": "Epigraph"
+        },
+        "author": {
+            "author": "Author",
+            "written": "Lyrics",
+            "composed": "Music",
+            "performed": "Artist",
+            "translated": "Translation"
+        },
+        "repeat": {
+            "label": "",
+            "times": "never | {n} time | {n} times"
+        }
+    },
+    "ru": {
+        "verse": {
+            "coda": "Кода",
+            "note": "Заметка",
+            "intro": "Интро",
+            "verse": "Строфа",
+            "chorus": "Припев",
+            "bridge": "Переход",
+            "asterism": "Астеризм",
+            "epigraph": "Эпиграф"
+        },
+        "author": {
+            "author": "Автор",
+            "written": "Слова",
+            "composed": "Музыка",
+            "performed": "Исполнитель",
+            "translated": "Перевод"
+        },
+        "repeat": {
+            "label": "",
+            "times": "ни разу | {n} раз | {n} раза | {n} раз"
+        }
+    }
+}

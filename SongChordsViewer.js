@@ -1,3 +1,8 @@
+/**
+ * @requires vue-i18n
+ * @requires ChordView
+ * @requires SongChordsParser
+ */
 import ChordView from './libs/ChordView/ChordView.js';
 import SongChordsParser, {
     CHORD_ALIAS,
@@ -19,6 +24,8 @@ import SongChordsParser, {
 } from './libs/SongChordsParser/SongChordsParser.js';
 import SongChordsViewerLine from './line/line.vue';
 
+import messages from './lang.json';
+
 const MODULE_ID = 'song-chords-viewer';
 
 export const SONG_VIEWER_EVENT_CLEAR = `${MODULE_ID}-clear`;
@@ -35,10 +42,10 @@ export default {
     name: MODULE_ID,
 
     props: [
-        'lang',
         'text',
         'tune',
-        'chords'
+        'chords',
+        'editor'
     ],
 
     emits: [
@@ -50,12 +57,16 @@ export default {
         SongChordsViewerLine
     },
 
+    i18n: {messages},
+
     data() {
         return {
             CHORD_ALIAS,
             REPEAT_ALIAS,
             SPACER_ALIAS,
+            VERSE_TYPE_CHORUS,
             VERSE_TYPE_DEFAULT,
+            VERSE_TYPE_ASTERISM,
             AUTHOR_TYPE_DEFAULT,
             SONG_VIEWER_EVENT_CLEAR,
             SONG_VIEWER_EVENT_PARSE,

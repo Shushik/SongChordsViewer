@@ -1,14 +1,10 @@
 <template>
-    <div
-        class="song"
-        @[SONG_VIEWER_EVENT_CLEAR]="onClear"
-        @[SONG_VIEWER_EVENT_PARSE]="onParse"
-    >
+    <div class="song">
         <div class="song__lyrics">
-            <h2
+            <div
                 v-if="song"
                 class="song__title"
-            >{{ song.title }}</h2>
+            >{{ song.title }}</div>
             <div
                 v-if="song"
                 class="song__copyright"
@@ -21,28 +17,34 @@
                             ['song__authors_of_' + group.type]: group.type != AUTHOR_TYPE_DEFAULT
                         }"
                     >
-                        <span class="song__label">{{ group.type }}:</span>
+                        <span class="song__label">{{ $t('author.' + group.type) }}</span>
                         <span
-                            v-for="author in group.list"
+                            v-for="author, pos in group.list"
                             class="song__author"
                         >{{ author }}</span>
                     </div>
                 </template>
             </div>
             <template v-if="song">
-                <p
+                <div
                     v-for="verse in song.verses"
                     class="song__verse"
                     :class="{
                         ['song__verse_type_' + verse.type]: verse.type != VERSE_TYPE_DEFAULT
                     }"
                 >
+                    <div
+                        v-if="verse.type != VERSE_TYPE_DEFAULT && verse.type != VERSE_TYPE_ASTERISM"
+                        class="song__label"
+                    >{{ $t('verse.' + verse.type) }}</div>
                     <template v-for="line in verse.lines">
                         <div
                             v-if="line.type == REPEAT_ALIAS"
                             class="song__repeat"
                         >
-                            <span class="song__label">repeat {{ line.times }}:</span><br/>
+                            <div class="song__label">
+                                {{ $t('repeat.label') }} {{ $tc('repeat.times', line.times) }}
+                            </div>
                             <template v-for="subline in line.lines">
                                 <template v-for="slice in subline">
                                     <song-chords-viewer-line
@@ -65,7 +67,7 @@
                             </template><br/>
                         </template>
                     </template>
-                </p>
+                </div>
             </template>
         </div>
         <div

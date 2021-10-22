@@ -1,18 +1,43 @@
 @SONG_CHORDS_VIEWER: song;
+@SONG_CHORDS_FONT_SIZE: auto;
+@SONG_CHORDS_FONT_SIZE_S: 0.9em;
+@SONG_CHORDS_FONT_SIZE_XS: 0.7em;
+@SONG_CHORDS_FONT_COLOR: rgb(0, 0, 0);
+@SONG_CHORDS_FONT_COLOR_MUTED: rgb(102, 102, 102);
+@SONG_CHORDS_BACKGROUND_COLOR: rgb(255, 255, 255);
+@SONG_CHORDS_BORDER_COLOR_MUTED: rgba(102, 102, 102, .5);
+@SONG_CHORDS_LIST_SEPARATOR: ", ";
+@SONG_CHORDS_LABEL_SEPARATOR: ": ";
 
 .@{SONG_CHORDS_VIEWER}
 {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: @SONG_CHORDS_FONT_SIZE;
+
     display: flex;
+
+    color: @SONG_CHORDS_FONT_COLOR;
+    background: @SONG_CHORDS_BACKGROUND_COLOR;
 
     &__chord
     {
-        color: gray;
+        font-size: @SONG_CHORDS_FONT_SIZE_XS;
+
+        vertical-align: bottom;
+        white-space: nowrap;
+
+        display: inline-block;
+
+        width: 0px;
+        height: 3em;
+
+        color: @SONG_CHORDS_FONT_COLOR_MUTED;
 
         &_is
         {
             &_alone
             {
-                
+                width: auto;
             }
         }
     }
@@ -24,11 +49,14 @@
 
     &__space
     {
+        font-size: @SONG_CHORDS_FONT_SIZE_S;
+
         display: inline-block;
 
         height: 0.2em;
+        margin: 0 0.1em;
 
-        color: gray;
+        color: @SONG_CHORDS_BORDER_COLOR_MUTED;
         border: solid 1px;
         border-top-width: 0;
         border-bottom-width: 2px;
@@ -36,12 +64,20 @@
 
     &__title
     {
-        
+        font-family: Times, serif;
+        font-size: 1.5em;
     }
 
     &__verse
     {
         margin-top: 1em;
+
+        .@{SONG_CHORDS_VIEWER}__label
+        {
+            font-size: @SONG_CHORDS_FONT_SIZE_S;
+
+            color: @SONG_CHORDS_FONT_COLOR_MUTED;
+        }
 
         &_type
         {
@@ -77,7 +113,10 @@
 
             &_asterism
             {
-                
+                font-family: Times, serif;
+                font-size: 1.5em;
+
+                margin-left: 2.5em;
             }
 
             &_epigraph
@@ -106,17 +145,100 @@
         width: 400px;
         min-height:200px;
         max-height: 400px;
-        margin-left: 2em;
+        padding-left: 4em;
+//         margin-left: 2em;
         overflow: auto;
     }
 
     &__repeat
     {
-        
+        position: relative;
+
+        &::before
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            top: -0.1em;
+            right: 100%;
+            bottom: -0.1em;
+
+            width: 0.3em;
+
+            color: @SONG_CHORDS_BORDER_COLOR_MUTED;
+            border: solid 1px;
+            border-right-width: 0;
+            border-left-width: 2px;
+            border-top-left-radius: 0.3em;
+            border-bottom-left-radius: 0.3em;
+        }
+
+        &::after
+        {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translate(0, -50%);
+
+            width: 0;
+            height: 0;
+            margin-right: 0.4em;
+
+            color: @SONG_CHORDS_BORDER_COLOR_MUTED;
+            border: solid 0.3em;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            border-left-width: 0;
+        }
+
+        .@{SONG_CHORDS_VIEWER}__label
+        {
+            font-size: @SONG_CHORDS_FONT_SIZE_S;
+
+            white-space: nowrap;
+
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            transform: translate(0, -50%);
+
+            margin-right: 1em;
+
+            color: @SONG_CHORDS_FONT_COLOR_MUTED;
+        }
     }
 
     &__authors
     {
+        font-size: @SONG_CHORDS_FONT_SIZE_S;
+
+        margin-top: 0.1em;
+
+        color: @SONG_CHORDS_FONT_COLOR_MUTED;
+
+        .@{SONG_CHORDS_VIEWER}__label
+        {
+            &::after
+            {
+                content: @SONG_CHORDS_LABEL_SEPARATOR;
+            }
+        }
+
+        .@{SONG_CHORDS_VIEWER}__author
+        {
+            &::after
+            {
+                content: @SONG_CHORDS_LIST_SEPARATOR;
+            }
+
+            &:last-child::after
+            {
+                content: "";
+            }
+        }
+
         &_of
         {
             &_written
