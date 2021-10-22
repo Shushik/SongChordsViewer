@@ -28,7 +28,6 @@
             <p
                 v-for="verse in song.verses"
                 class="song__verse"
-                style="margin-top: 1em;"
                 :class="{
                     ['song__verse_type_' + verse.type]: verse.type != VERSE_TYPE_DEFAULT
                 }"
