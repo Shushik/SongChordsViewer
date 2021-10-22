@@ -1,7 +1,7 @@
 import {
     CHORD_ALIAS,
     SPACER_ALIAS
-} from '../SongChordsParser/SongChordsParser.js';
+} from '../libs/SongChordsParser/SongChordsParser.js';
 
 const MODULE_ID = 'song-chords-viewer-line';
 

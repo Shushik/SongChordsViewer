@@ -1,6 +1,6 @@
-[submodule "SongChordsParser"]
-	path = SongChordsParser
+[submodule "libs/SongChordsParser"]
+	path = libs/SongChordsParser
 	url = https://github.com/Shushik/SongChordsParser
-[submodule "ChordView"]
-	path = ChordView
+[submodule "libs/ChordView"]
+	path = libs/ChordView
 	url = https://github.com/Shushik/ChordView

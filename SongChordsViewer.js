@@ -1,4 +1,4 @@
-import ChordView from './ChordView/ChordView.js';
+import ChordView from './libs/ChordView/ChordView.js';
 import SongChordsParser, {
     CHORD_ALIAS,
     REPEAT_ALIAS,
@@ -16,7 +16,7 @@ import SongChordsParser, {
     AUTHOR_TYPE_ARTIST,
     AUTHOR_TYPE_DEFAULT,
     AUTHOR_TYPE_TRANSLATION
-} from './SongChordsParser/SongChordsParser.js';
+} from './libs/SongChordsParser/SongChordsParser.js';
 import SongChordsViewerLine from './line/line.vue';
 
 const MODULE_ID = 'song-chords-viewer';
