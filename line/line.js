@@ -3,8 +3,14 @@ import {
     SPACER_ALIAS
 } from '../libs/SongChordsParser/SongChordsParser.js';
 
+/**
+ * @const {string} MODULE_ID
+ */
 const MODULE_ID = 'song-chords-viewer-line';
 
+/**
+ * @const {string} SONG_VIEWER_EVENT_CHORD_FOUND
+ */
 export const SONG_VIEWER_EVENT_CHORD_FOUND = `${MODULE_ID}-chord-found`;
 
 export default {
