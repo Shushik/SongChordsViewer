@@ -6,7 +6,7 @@ import {
 /**
  * @const {string} MODULE_ID
  */
-const MODULE_ID = 'song-chords-viewer-line';
+const MODULE_ID = 'song-chords-viewer-entity';
 
 /**
  * @const {string} SONG_VIEWER_EVENT_CHORD_FOUND

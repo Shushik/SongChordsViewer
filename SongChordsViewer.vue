@@ -50,7 +50,7 @@
                             </div>
                             <template v-for="subline in line.lines">
                                 <template v-for="slice in subline">
-                                    <song-chords-viewer-line
+                                    <song-chords-viewer-entity
                                         :text="!slice.type ? slice : null"
                                         :type="slice.type ? slice.type : null"
                                         :alone="slice.alone ? slice.alone : null"
@@ -59,7 +59,8 @@
                                             verse.type != VERSE_TYPE_NOTE &&
                                             verse.type != VERSE_TYPE_CHORUS &&
                                             verse.type != VERSE_TYPE_DEFAULT &&
-                                            verse.type != VERSE_TYPE_ASTERISM
+                                            verse.type != VERSE_TYPE_ASTERISM &&
+                                            verse.type != VERSE_TYPE_EPIGRAPH
                                         ) ? true : null"
                                         @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                     />
@@ -68,7 +69,7 @@
                         </div>
                         <template v-else>
                             <template v-for="slice in line">
-                                <song-chords-viewer-line
+                                <song-chords-viewer-entity
                                     :text="!slice.type ? slice : null"
                                     :type="slice.type ? slice.type : null"
                                     :alone="slice.alone ? slice.alone : null"
@@ -77,7 +78,8 @@
                                         verse.type != VERSE_TYPE_NOTE &&
                                         verse.type != VERSE_TYPE_CHORUS &&
                                         verse.type != VERSE_TYPE_DEFAULT &&
-                                        verse.type != VERSE_TYPE_ASTERISM
+                                        verse.type != VERSE_TYPE_ASTERISM &&
+                                        verse.type != VERSE_TYPE_EPIGRAPH
                                     ) ? true : null"
                                     @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                 />

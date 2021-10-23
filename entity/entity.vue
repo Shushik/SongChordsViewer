@@ -20,4 +20,4 @@
         {{ !bridged ? text : null }}
     </span>
 </template>
-<script src="./line.js"></script>
+<script src="./entity.js"></script>

@@ -29,9 +29,9 @@ import SongChordsParser, {
     AUTHOR_TYPE_DEFAULT,
     AUTHOR_TYPE_TRANSLATION
 } from './libs/SongChordsParser/SongChordsParser.js';
-import SongChordsViewerLine, {
+import SongChordsViewerEntity, {
     SONG_VIEWER_EVENT_CHORD_FOUND
-} from './line/line.vue';
+} from './entity/entity.vue';
 
 /**
  * @const {object} messages
@@ -81,7 +81,7 @@ export default {
     ],
 
     components: {
-        SongChordsViewerLine
+        SongChordsViewerEntity
     },
 
     i18n: {messages},
@@ -95,6 +95,7 @@ export default {
             VERSE_TYPE_CHORUS,
             VERSE_TYPE_DEFAULT,
             VERSE_TYPE_ASTERISM,
+            VERSE_TYPE_EPIGRAPH,
             AUTHOR_TYPE_DEFAULT,
             SONG_VIEWER_EVENT_CLEAR,
             SONG_VIEWER_EVENT_PARSE,
