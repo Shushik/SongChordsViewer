@@ -35,9 +35,11 @@ export default {
     },
 
     mounted() {
-        setTimeout(() => {
-            this.$emit(SONG_VIEWER_EVENT_CHORD_FOUND, this.$refs);
-        }, 0);
+        if (this.bridged) {
+            setTimeout(() => {
+                this.$emit(SONG_VIEWER_EVENT_CHORD_FOUND, this.$refs);
+            }, 0);
+        }
     }
 
 };
