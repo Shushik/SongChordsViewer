@@ -23,19 +23,39 @@ import SongChordsParser, {
     AUTHOR_TYPE_DEFAULT,
     AUTHOR_TYPE_TRANSLATION
 } from './libs/SongChordsParser/SongChordsParser.js';
-import SongChordsViewerLine from './line/line.vue';
+import SongChordsViewerLine, {
+    SONG_VIEWER_EVENT_CHORD_FOUND
+} from './line/line.vue';
 
+/**
+ * @const {object} messages
+ */
 import messages from './lang.json';
 
+/**
+ * @const {string} MODULE_ID
+ */
 const MODULE_ID = 'song-chords-viewer';
 
+/**
+ * @const {string} SONG_VIEWER_EVENT_CLEAR
+ * @const {string} SONG_VIEWER_EVENT_PARSE
+ * @const {string} SONG_VIEWER_EVENT_PARSED
+ * @const {string} SONG_VIEWER_EVENT_CLEARED
+ */
 export const SONG_VIEWER_EVENT_CLEAR = `${MODULE_ID}-clear`;
 export const SONG_VIEWER_EVENT_PARSE = `${MODULE_ID}-parse`;
 export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
 
+/**
+ * @const {Array<string>} DEFAULT_TUNE
+ */
 const DEFAULT_TUNE = ['E', 'B', 'G', 'D', 'A', 'E'];
 
+/**
+ * @const {SongChordsParser} api
+ */
 const api = new SongChordsParser();
 
 export default {
@@ -65,12 +85,14 @@ export default {
             CHORD_ALIAS,
             REPEAT_ALIAS,
             SPACER_ALIAS,
+            VERSE_TYPE_NOTE,
             VERSE_TYPE_CHORUS,
             VERSE_TYPE_DEFAULT,
             VERSE_TYPE_ASTERISM,
             AUTHOR_TYPE_DEFAULT,
             SONG_VIEWER_EVENT_CLEAR,
             SONG_VIEWER_EVENT_PARSE,
+            SONG_VIEWER_EVENT_CHORD_FOUND,
 
             song: null
         };
@@ -84,6 +106,10 @@ export default {
 
     methods: {
 
+        /**
+         * @method clear
+         * @fires SONG_VIEWER_EVENT_CLEARED
+         */
         clear() {
             let root = this.$refs.chords;
 
@@ -96,6 +122,11 @@ export default {
             this.$emit(SONG_VIEWER_EVENT_CLEARED);
         },
 
+        /**
+         * @method parse
+         * @param {string} raw
+         * @fires SONG_VIEWER_EVENT_CLEARED
+         */
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
             let root = this.$refs.chords;
@@ -110,6 +141,7 @@ export default {
             } = api;
 
             this.song = {
+                tune: this.tune ? this.tune : DEFAULT_TUNE,
                 title,
                 chords: chords,
                 verses: verses,
@@ -126,7 +158,7 @@ export default {
 
                     return new ChordView({
                         root,
-                        tune,
+                        tune: this.song.tune,
                         title: chord.replace(/(_\S+)/, ''),
                         chord: this.chords[chord]
                     });
@@ -134,6 +166,29 @@ export default {
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
+        },
+
+        /**
+         * @method onBridgeChordsFound
+         * @param {object} refs
+         * @fires SONG_VIEWER_EVENT_CLEARED
+         */
+        onBridgeChordsFound(refs) {
+            let al0 = '';
+            let root = '';
+            let chord = '';
+
+            for (al0 in refs) {
+                root = refs[al0];
+                chord = al0;
+
+                new ChordView({
+                    root,
+                    tune: this.song.tune,
+                    title: chord.replace(/(_\S+)/, ''),
+                    chord: this.chords[chord]
+                });
+            }
         },
 
         [SONG_VIEWER_EVENT_CLEAR]() {

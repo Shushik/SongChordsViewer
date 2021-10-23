@@ -55,6 +55,12 @@
                                         :type="slice.type ? slice.type : null"
                                         :alone="slice.alone ? slice.alone : null"
                                         :value="slice.value ? slice.value : null"
+                                        :bridged="(
+                                            verse.type != VERSE_TYPE_CHORUS &&
+                                            verse.type != VERSE_TYPE_DEFAULT &&
+                                            verse.type != VERSE_TYPE_ASTERISM &&
+                                            verse.type != VERSE_TYPE_NOTE
+                                        ) ? true : null"
                                     />
                                 </template><br/>
                             </template>
@@ -66,6 +72,13 @@
                                     :type="slice.type ? slice.type : null"
                                     :alone="slice.alone ? slice.alone : null"
                                     :value="slice.value ? slice.value : null"
+                                    :bridged="(
+                                        verse.type != VERSE_TYPE_CHORUS &&
+                                        verse.type != VERSE_TYPE_DEFAULT &&
+                                        verse.type != VERSE_TYPE_ASTERISM &&
+                                        verse.type != VERSE_TYPE_NOTE
+                                    ) ? true : null"
+                                    @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                 />
                             </template><br/>
                         </template>

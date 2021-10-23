@@ -5,6 +5,8 @@ import {
 
 const MODULE_ID = 'song-chords-viewer-line';
 
+export const SONG_VIEWER_EVENT_CHORD_FOUND = `${MODULE_ID}-chord-found`;
+
 export default {
 
     name: MODULE_ID,
@@ -13,7 +15,8 @@ export default {
         'text',
         'type',
         'alone',
-        'value'
+        'value',
+        'bridged'
     ],
 
     data() {
@@ -24,5 +27,11 @@ export default {
             song: null
         };
     },
+
+    mounted() {
+        setTimeout(() => {
+            this.$emit(SONG_VIEWER_EVENT_CHORD_FOUND, this.$refs);
+        }, 0);
+    }
 
 };
