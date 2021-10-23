@@ -1,4 +1,10 @@
 /**
+ * Song text viewer based on Vue
+ *
+ * @author Shushik <silkleopard@yandex.ru>
+ * @version 1.0
+ * @license MIT
+ *
  * @requires vue
  * @requires vue-i18n
  * @requires ChordView
