@@ -41,6 +41,9 @@
                         <div
                             v-if="line.type == REPEAT_ALIAS"
                             class="song__repeat"
+                            :class="{
+                                'song__repeat_is_chorded': line.chorded
+                            }"
                         >
                             <div class="song__label">
                                 {{ $t('repeat.label') }} {{ $tc('repeat.times', line.times) }}

@@ -1,4 +1,27 @@
 {
+    "de": {
+        "verse": {
+            "coda": "Coda",
+            "note": "Note",
+            "intro": "Intro",
+            "verse": "Verse",
+            "chorus": "Chorus",
+            "bridge": "Bridge",
+            "asterism": "Asterism",
+            "epigraph": "Epigraph"
+        },
+        "author": {
+            "author": "Autor",
+            "written": "Poesie",
+            "composed": "Musik",
+            "performed": "Artist",
+            "translated": "Übertragung"
+        },
+        "repeat": {
+            "label": "",
+            "times": "nie | {n} mal | {n} mal"
+        }
+    },
     "en": {
         "verse": {
             "coda": "Coda",

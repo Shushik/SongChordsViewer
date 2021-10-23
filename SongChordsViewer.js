@@ -1,4 +1,5 @@
 /**
+ * @requires vue
  * @requires vue-i18n
  * @requires ChordView
  * @requires SongChordsParser
@@ -120,7 +121,7 @@ export default {
 
                 this.song.chords = chords.map((chord) => {
                     if (!this.chords[chord]) {
-                        return;
+                        return null;
                     }
 
                     return new ChordView({
