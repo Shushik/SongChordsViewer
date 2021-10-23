@@ -8,6 +8,7 @@
 @SONG_CHORDS_BORDER_COLOR_MUTED: rgba(102, 102, 102, .5);
 @SONG_CHORDS_LIST_SEPARATOR: ", ";
 @SONG_CHORDS_LABEL_SEPARATOR: ": ";
+@SONG_CHORDS_CHORUS_SEPARATOR: "…";
 
 .@{SONG_CHORDS_VIEWER}
 {
@@ -149,7 +150,7 @@
                     {
                         &:last-child::after
                         {
-                            content: "";
+                            content: @SONG_CHORDS_CHORUS_SEPARATOR;
                         }
                     }
                 }
