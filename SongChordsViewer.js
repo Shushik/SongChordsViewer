@@ -99,7 +99,7 @@ const DEFAULT_TUNE = ['E', 'B', 'G', 'D', 'A', 'E'];
 /**
  * @const {number} EDITOR_TIMER
  */
-const EDITOR_TIMER = 150;
+const EDITOR_TIMER = 300;
 
 /**
  * @const {SongChordsParser} api
@@ -234,20 +234,31 @@ export default {
 
             if (chords && chords.length && root && this.chords) {
                 this.song.chords = chords.map((chord) => {
-                    if (!this.chords[chord] && chord[0] != '{') {
-                        return null;
+                    let value = null;
+
+                    if (chord[0] == '{') {
+                        try {
+                            value = JSON.parse(chord.replace(
+                                /(\{|, )([^:]+):/g,
+                                '$1"$2":'
+                            ));
+                        } catch(e) {}
+                    } else if (this.chords[chord]) {
+                        value = this.chords[chord];
                     }
 
-                    return new ChordView({
-                        root,
-                        tune: this.song.tune,
-                        title: chord[0] != '{' ?
-                               chord.replace(/(_\S+)/, '') :
-                               '',
-                        chord: chord[0] == '{' ?
-                               JSON.parse(chord.replace(/(\{|, )([^:]+):/g, '$1"$2":')) :
-                               this.chords[chord]
-                    });
+                    if (value) {
+                        return new ChordView({
+                            root,
+                            tune: this.song.tune,
+                            title: chord[0] != '{' ?
+                                   chord.replace(/(_\S+)/, '') :
+                                   '',
+                            chord: value
+                        });
+                    }
+
+                    return null;
                 });
             }
 
@@ -271,6 +282,7 @@ export default {
             let al0 = '';
             let root = '';
             let chord = '';
+            let value = null;
 
             for (al0 in refs) {
                 root = refs[al0];
@@ -278,13 +290,24 @@ export default {
 
                 root.innerHTML = '';
 
-                new ChordView({
-                    root,
-                    tune: this.song.tune,
-                    chord: chord[0] == '{' ?
-                           JSON.parse(chord.replace(/(\{|, )([^:]+):/g, '$1"$2":')) :
-                           this.chords[chord]
-                });
+                if (chord[0] == '{') {
+                    try {
+                        value = JSON.parse(chord.replace(
+                            /(\{|, )([^:]+):/g,
+                            '$1"$2":'
+                        ));
+                    } catch(e) {}
+                } else if (this.chords[chord]) {
+                    value = this.chords[chord];
+                }
+
+                if (value) {
+                    new ChordView({
+                        root,
+                        tune: this.song.tune,
+                        chord: value
+                    });
+                }
             }
         },
 
