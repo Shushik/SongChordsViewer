@@ -246,7 +246,6 @@ export default {
                 new ChordView({
                     root,
                     tune: this.song.tune,
-                    title: chord.replace(/(_\S+)/, ''),
                     chord: this.chords[chord]
                 });
             }
