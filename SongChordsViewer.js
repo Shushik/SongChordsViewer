@@ -233,36 +233,48 @@ export default {
             root.innerHTML = '';
 
             if (chords && chords.length && root && this.chords) {
-                this.song.chords = chords.map((chord) => {
-                    let value = null;
-
-                    if (chord[0] == '{') {
-                        try {
-                            value = JSON.parse(chord.replace(
-                                /(\{|, )([^:]+):/g,
-                                '$1"$2":'
-                            ));
-                        } catch(e) {}
-                    } else if (this.chords[chord]) {
-                        value = this.chords[chord];
-                    }
-
-                    if (value) {
-                        return new ChordView({
-                            root,
-                            tune: this.song.tune,
-                            title: chord[0] != '{' ?
-                                   chord.replace(/(_\S+)/, '') :
-                                   '',
-                            chord: value
-                        });
-                    }
-
-                    return null;
+                this.song.chords = chords.map((item) => {
+                    return this.parseChord(item, root);
                 });
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
+        },
+
+        /**
+         * @method onEditorInput
+         * @param {string} raw
+         * @param {HTMLElement} root
+         * @param {boolean} titled
+         * @returns {object}
+         */
+        parseChord(raw, root, titled = true) {
+            let title = titled !== false && raw[0] != '{' ?
+                        raw.replace(/(_\S+)/, '') :
+                        '';
+            let chord = null;
+
+            if (raw[0] == '{') {
+                try {
+                    chord = JSON.parse(raw.replace(
+                        /(\{|, )([^:]+):/g,
+                        '$1"$2":'
+                    ));
+                } catch(e) {}
+            } else if (this.chords[raw]) {
+                chord = this.chords[raw];
+            }
+console.log(raw, chord);
+            if (chord) {
+                return new ChordView({
+                    root,
+                    tune: this.song.tune,
+                    title,
+                    chord
+                });
+            }
+
+            return chord;
         },
 
         /**
@@ -281,33 +293,13 @@ export default {
         onBridgeChordsFound(refs) {
             let al0 = '';
             let root = '';
-            let chord = '';
-            let value = null;
 
             for (al0 in refs) {
                 root = refs[al0];
-                chord = al0;
 
                 root.innerHTML = '';
 
-                if (chord[0] == '{') {
-                    try {
-                        value = JSON.parse(chord.replace(
-                            /(\{|, )([^:]+):/g,
-                            '$1"$2":'
-                        ));
-                    } catch(e) {}
-                } else if (this.chords[chord]) {
-                    value = this.chords[chord];
-                }
-
-                if (value) {
-                    new ChordView({
-                        root,
-                        tune: this.song.tune,
-                        chord: value
-                    });
-                }
+                this.parseChord(al0, root, false);
             }
         },
 
