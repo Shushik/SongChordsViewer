@@ -13,8 +13,10 @@
 import ChordView from './libs/ChordView/ChordView.js';
 import SongChordsParser, {
     CHORD_ALIAS,
+    CHORD_SHORTCUT,
     REPEAT_ALIAS,
     SPACER_ALIAS,
+    SPACER_SHORTCUT,
     VERSE_TYPE_CODA,
     VERSE_TYPE_NOTE,
     VERSE_TYPE_CHORUS,
@@ -53,6 +55,41 @@ export const SONG_VIEWER_EVENT_CLEAR = `${MODULE_ID}-clear`;
 export const SONG_VIEWER_EVENT_PARSE = `${MODULE_ID}-parse`;
 export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
+
+const REPEAT_DEFAULT_VALUE = 2;
+const SPACER_DEFAULT_VALUE = 3;
+
+const BLOCKS_LIST = [
+    VERSE_TYPE_CODA,
+    VERSE_TYPE_NOTE,
+    VERSE_TYPE_CHORUS,
+    VERSE_TYPE_INTRO,
+    VERSE_TYPE_BRIDGE,
+    VERSE_TYPE_DEFAULT,
+    VERSE_TYPE_ASTERISM,
+    VERSE_TYPE_EPIGRAPH,
+    AUTHOR_TYPE_MUSIC,
+    AUTHOR_TYPE_LYRICS,
+    AUTHOR_TYPE_ARTIST,
+    AUTHOR_TYPE_DEFAULT,
+    AUTHOR_TYPE_TRANSLATION
+];
+
+const INLINES_LIST = [
+    CHORD_ALIAS,
+    CHORD_SHORTCUT,
+    REPEAT_ALIAS,
+    SPACER_ALIAS,
+    SPACER_SHORTCUT
+];
+
+const INLINES_VALUES = {
+    [CHORD_ALIAS]: 'Am',
+    [CHORD_SHORTCUT]: 'Em',
+    [REPEAT_ALIAS]: REPEAT_DEFAULT_VALUE,
+    [SPACER_ALIAS]: 0,
+    [SPACER_SHORTCUT]: SPACER_DEFAULT_VALUE
+}
 
 /**
  * @const {Array<string>} DEFAULT_TUNE
@@ -101,13 +138,20 @@ export default {
             SONG_VIEWER_EVENT_PARSE,
             SONG_VIEWER_EVENT_CHORD_FOUND,
 
+            BLOCKS_LIST,
+            INLINES_LIST,
+            INLINES_VALUES,
+
+            raw: '',
             song: null
         };
     },
 
     mounted() {
         if (this.text) {
-            this.parse(this.text);
+            this.raw = this.text;
+
+            this.parse(this.raw);
         }
     },
 
@@ -119,6 +163,8 @@ export default {
          */
         clear() {
             let root = this.$refs.chords;
+
+            this.raw = '';
 
             this.song = null;
 
@@ -173,6 +219,14 @@ export default {
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
+        },
+
+        /**
+         * @method onEditorInput
+         * @param {Event} event
+         */
+        onEditorInput(event) {
+            this.parse(this.raw);
         },
 
         /**

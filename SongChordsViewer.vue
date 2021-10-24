@@ -1,5 +1,34 @@
 <template>
-    <div class="song">
+    <div
+        class="song"
+        :class="{
+            'song_mode_editor': editor
+        }"
+    >
+        <div
+            v-if="editor"
+            class="song__editor"
+        >
+            <div class="song__editor-tags">
+                <span
+                    v-for="tag in BLOCKS_LIST"
+                    class="song__editor-tag"
+                >[{{ tag }}]…[/{{ tag }}]</span>
+            </div>
+            <div class="song__editor-tags song__editor-tags_for_inlines">
+                <span
+                    v-for="tag in INLINES_LIST"
+                    class="song__editor-tag"
+                >[{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]</span>
+            </div>
+            <div class="song__editor-input">
+                <textarea
+                    v-model="raw"
+                    class="song__textarea"
+                    @input="onEditorInput"
+                ></textarea>
+            </div>
+        </div>
         <div class="song__lyrics">
             <div
                 v-if="song"
