@@ -264,7 +264,7 @@ export default {
             } else if (this.chords[raw]) {
                 chord = this.chords[raw];
             }
-console.log(raw, chord);
+
             if (chord) {
                 return new ChordView({
                     root,
