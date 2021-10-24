@@ -19,7 +19,9 @@
                 <span
                     v-for="tag in INLINES_LIST"
                     class="song__editor-tag"
-                >[{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]</span>
+                >
+                    [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]<template v-if="tag == REPEAT_ALIAS">…[/{{ tag }}]</template>
+                </span>
             </div>
             <div class="song__editor-input">
                 <textarea
