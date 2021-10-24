@@ -15,7 +15,7 @@
                     class="song__editor-tag"
                 >[{{ tag }}]…[/{{ tag }}]</span>
             </div>
-            <div class="song__editor-tags song__editor-tags_for_inlines">
+            <div class="song__editor-tags">
                 <span
                     v-for="tag in INLINES_LIST"
                     class="song__editor-tag"
@@ -25,6 +25,7 @@
                 <textarea
                     v-model="raw"
                     class="song__textarea"
+                    :placeholder="$t('editor.placeholder')"
                     @input="onEditorInput"
                 ></textarea>
             </div>

@@ -1,8 +1,9 @@
 {
     "de": {
-        "tags": {
+        "editor": {
             "blocks": "Blocks",
-            "inlines": "Inlines"
+            "inlines": "Inlines",
+            "placeholder": "Enter song text with chords here and watch the result"
         },
         "verse": {
             "coda": "Coda",
@@ -27,9 +28,10 @@
         }
     },
     "en": {
-        "tags": {
+        "editor": {
             "blocks": "Blocks",
-            "inlines": "Inlines"
+            "inlines": "Inlines",
+            "placeholder": "Enter song text with chords here and watch the result"
         },
         "verse": {
             "coda": "Coda",
@@ -54,9 +56,10 @@
         }
     },
     "ru": {
-        "tags": {
+        "editor": {
             "blocks": "Блоки",
-            "inlines": "Инлайны"
+            "inlines": "Инлайны",
+            "placeholder": "Начните вводить текст песни с аккордами и справа отобразится результат"
         },
         "verse": {
             "coda": "Кода",
