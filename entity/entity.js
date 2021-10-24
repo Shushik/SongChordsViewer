@@ -1,6 +1,9 @@
 import {
     CHORD_ALIAS,
-    SPACER_ALIAS
+    SPACER_ALIAS,
+    VERSE_TYPE_CODA,
+    VERSE_TYPE_INTRO,
+    VERSE_TYPE_BRIDGE
 } from '../libs/SongChordsParser/SongChordsParser.js';
 
 /**
@@ -22,7 +25,8 @@ export default {
         'type',
         'alone',
         'value',
-        'bridged'
+        'verse'
+//         'bridged'
     ],
 
     data() {
@@ -30,8 +34,21 @@ export default {
             CHORD_ALIAS,
             SPACER_ALIAS,
 
+            bridged: false,
             song: null
         };
+    },
+
+    created() {
+        switch (this.verse) {
+
+            case VERSE_TYPE_CODA:
+            case VERSE_TYPE_INTRO:
+            case VERSE_TYPE_BRIDGE:
+                this.bridged = true;
+                break;
+
+        }
     },
 
     mounted() {
