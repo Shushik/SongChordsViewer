@@ -7,7 +7,11 @@
 @SONG_CHORDS_LINK_COLOR: rgb(0, 0, 238);
 @SONG_CHORDS_BACKGROUND_COLOR: rgb(255, 255, 255);
 @SONG_CHORDS_BORDER_COLOR_MUTED: rgba(102, 102, 102, 0.5);
-@SONG_CHORDS_BORDER_COLOR_FIELDS: rgba(255, 192, 203, 0.7);
+@SONG_CHORDS_BORDER_COLOR_FIELDS: rgba(255, 192, 203, 0.9);
+@SONG_CHORDS_BORDER_COLOR_SQUARES: rgba(102, 102, 102, 0.08);
+@SONG_CHORDS_PADDING: 10px;
+@SONG_CHORDS_PADDING_S: 5px;
+@SONG_CHORDS_PADDING_XS: 3px;
 @SONG_CHORDS_COMMA: ", ";
 @SONG_CHORDS_COLON: ": ";
 @SONG_CHORDS_ELIPSIS: "…";
@@ -23,7 +27,10 @@
     min-height: 100%;
 
     color: @SONG_CHORDS_FONT_COLOR;
-    background: @SONG_CHORDS_BACKGROUND_COLOR;
+    background-color: @SONG_CHORDS_BACKGROUND_COLOR;
+    background-size: 15px 15px;
+    background-image: linear-gradient(to right, @SONG_CHORDS_BORDER_COLOR_SQUARES 1px, transparent 1px),
+                      linear-gradient(to bottom, @SONG_CHORDS_BORDER_COLOR_SQUARES 1px, transparent 1px);
 
     &__chord
     {
@@ -180,7 +187,7 @@
         align-self: stretch;
 
         width: 22%;
-        padding-left: 0.5em;
+        padding: 0 @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING;
         margin-left: 3%;
         box-sizing: border-box;
 
@@ -195,7 +202,11 @@
 
         width: 32%;
         margin-right: 3%;
+        padding: @SONG_CHORDS_PADDING_S @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING;
         box-sizing: border-box;
+
+        background-color: @SONG_CHORDS_BACKGROUND_COLOR;
+        border-right: @SONG_CHORDS_BORDER_COLOR_MUTED solid 1px;
     }
 
     &__editor-tag
@@ -236,8 +247,7 @@
         align-self: stretch;
 
         width: 75%;
-        padding-bottom: 0.5em;
-        padding-left: 5em;
+        padding: @SONG_CHORDS_PADDING_S @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING_S 5em;
         box-sizing: border-box;
     }
 
