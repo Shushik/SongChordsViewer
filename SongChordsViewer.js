@@ -195,15 +195,15 @@ export default {
 
             this.song = {
                 tune: this.tune ? this.tune : DEFAULT_TUNE,
-                title,
+                title: this.raw ? title : '',
                 chords: chords,
                 verses: verses,
                 authors: authorsGroupedByType
             };
 
-            if (chords && chords.length && root && this.chords) {
-                root.innerHTML = '';
+            root.innerHTML = '';
 
+            if (chords && chords.length && root && this.chords) {
                 this.song.chords = chords.map((chord) => {
                     if (!this.chords[chord]) {
                         return null;
