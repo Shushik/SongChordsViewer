@@ -28,7 +28,6 @@
                     v-model="raw"
                     class="song__textarea"
                     :placeholder="$t('editor.placeholder')"
-                    @input="onEditorInput"
                 ></textarea>
             </div>
         </div>
@@ -80,7 +79,10 @@
                             <div class="song__label">
                                 {{ $t('repeat.label') }} {{ $tc('repeat.times', line.times) }}
                             </div>
-                            <template v-for="subline in line.lines">
+                            <template
+                                v-for="subline in line.lines"
+                                :key="'song-chords-viewer-entity-' + revision"
+                            >
                                 <template v-for="slice in subline">
                                     <song-chords-viewer-entity
                                         :text="!slice.type ? slice : null"
@@ -94,7 +96,10 @@
                             </template>
                         </div>
                         <template v-else>
-                            <template v-for="slice in line">
+                            <template
+                                v-for="slice in line"
+                                :key="'song-chords-viewer-entity-' + revision"
+                            >
                                 <song-chords-viewer-entity
                                     :text="!slice.type ? slice : null"
                                     :type="slice.type ? slice.type : null"

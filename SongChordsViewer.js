@@ -97,9 +97,19 @@ const INLINES_VALUES = {
 const DEFAULT_TUNE = ['E', 'B', 'G', 'D', 'A', 'E'];
 
 /**
+ * @const {number} EDITOR_TIMER
+ */
+const EDITOR_TIMER = 150;
+
+/**
  * @const {SongChordsParser} api
  */
 const api = new SongChordsParser();
+
+/**
+ * @var {object} timer
+ */
+let timer = null;
 
 export default {
 
@@ -142,6 +152,7 @@ export default {
             INLINES_LIST,
             INLINES_VALUES,
 
+            revision: 0,
             raw: '',
             song: null
         };
@@ -153,6 +164,24 @@ export default {
 
             this.parse(this.raw);
         }
+    },
+
+    watch: {
+
+        raw(val, old) {
+            if (timer) {
+                clearTimeout(timer);
+
+                timer = null;
+            }
+
+            setTimeout(() => {
+                this.revision++;
+
+                this.parse(val);
+            }, EDITOR_TIMER);
+        }
+
     },
 
     methods: {
@@ -205,15 +234,19 @@ export default {
 
             if (chords && chords.length && root && this.chords) {
                 this.song.chords = chords.map((chord) => {
-                    if (!this.chords[chord]) {
+                    if (!this.chords[chord] && chord[0] != '{') {
                         return null;
                     }
 
                     return new ChordView({
                         root,
                         tune: this.song.tune,
-                        title: chord.replace(/(_\S+)/, ''),
-                        chord: this.chords[chord]
+                        title: chord[0] != '{' ?
+                               chord.replace(/(_\S+)/, '') :
+                               '',
+                        chord: chord[0] == '{' ?
+                               JSON.parse(chord.replace(/(\{|, )([^:]+):/g, '$1"$2":')) :
+                               this.chords[chord]
                     });
                 });
             }
@@ -243,10 +276,14 @@ export default {
                 root = refs[al0];
                 chord = al0;
 
+                root.innerHTML = '';
+
                 new ChordView({
                     root,
                     tune: this.song.tune,
-                    chord: this.chords[chord]
+                    chord: chord[0] == '{' ?
+                           JSON.parse(chord.replace(/(\{|, )([^:]+):/g, '$1"$2":')) :
+                           this.chords[chord]
                 });
             }
         },
