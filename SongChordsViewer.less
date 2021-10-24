@@ -6,9 +6,9 @@
 @SONG_CHORDS_FONT_COLOR_MUTED: rgb(102, 102, 102);
 @SONG_CHORDS_BACKGROUND_COLOR: rgb(255, 255, 255);
 @SONG_CHORDS_BORDER_COLOR_MUTED: rgba(102, 102, 102, .5);
-@SONG_CHORDS_LIST_SEPARATOR: ", ";
-@SONG_CHORDS_LABEL_SEPARATOR: ": ";
-@SONG_CHORDS_CHORUS_SEPARATOR: "…";
+@SONG_CHORDS_COMMA: ", ";
+@SONG_CHORDS_COLON: ": ";
+@SONG_CHORDS_ELIPSIS: "…";
 
 .@{SONG_CHORDS_VIEWER}
 {
@@ -107,7 +107,7 @@
 
                     &::after
                     {
-                        content: @SONG_CHORDS_LABEL_SEPARATOR;
+                        content: @SONG_CHORDS_COLON;
                     }
                 }
             }
@@ -139,7 +139,7 @@
                 {
                     &::after
                     {
-                        content: @SONG_CHORDS_LABEL_SEPARATOR;
+                        content: @SONG_CHORDS_COLON;
                     }
                 }
 
@@ -149,7 +149,7 @@
                     {
                         &:last-child::after
                         {
-                            content: @SONG_CHORDS_CHORUS_SEPARATOR;
+                            content: @SONG_CHORDS_ELIPSIS;
                         }
                     }
                 }
@@ -290,7 +290,7 @@
         {
             &::after
             {
-                content: @SONG_CHORDS_LABEL_SEPARATOR;
+                content: @SONG_CHORDS_COLON;
             }
         }
 
@@ -298,7 +298,7 @@
         {
             &::after
             {
-                content: @SONG_CHORDS_LIST_SEPARATOR;
+                content: @SONG_CHORDS_COMMA;
             }
 
             &:last-child::after
