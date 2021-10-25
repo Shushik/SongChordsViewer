@@ -12,6 +12,11 @@
  */
 import ChordView from './libs/ChordView/ChordView.js';
 import SongChordsParser, {
+    FLAT_REXP,
+    FLAT_SYMBOL,
+    BEKAR_SYMBOL,
+    SHARP_REXP,
+    SHARP_SYMBOL,
     CHORD_ALIAS,
     CHORD_SHORTCUT,
     REPEAT_ALIAS,
@@ -249,10 +254,19 @@ export default {
          * @returns {object}
          */
         parseChord(raw, root, titled = true) {
+            let alias = raw.
+                        replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
+                        replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
             let title = titled !== false && raw[0] != '{' ?
-                        raw.replace(/(_\S+)/, '') :
+                        raw.replace(/(_\S+)$/, '') :
                         '';
             let chord = null;
+
+            if (title) {
+                title = title.
+                        replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
+                        replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
+            }
 
             if (raw[0] == '{') {
                 try {
@@ -261,8 +275,8 @@ export default {
                         '$1"$2":'
                     ));
                 } catch(e) {}
-            } else if (this.chords[raw]) {
-                chord = this.chords[raw];
+            } else if (this.chords[alias]) {
+                chord = this.chords[alias];
             }
 
             if (chord) {
