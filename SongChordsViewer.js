@@ -58,11 +58,13 @@ const MODULE_ID = 'song-chords-viewer';
  * @const {string} SONG_VIEWER_EVENT_PARSE
  * @const {string} SONG_VIEWER_EVENT_PARSED
  * @const {string} SONG_VIEWER_EVENT_CLEARED
+ * @const {string} SONG_VIEWER_EVENT_SEARCHED
  */
 export const SONG_VIEWER_EVENT_CLEAR = `${MODULE_ID}-clear`;
 export const SONG_VIEWER_EVENT_PARSE = `${MODULE_ID}-parse`;
 export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
+export const SONG_VIEWER_EVENT_SEARCHED = `${MODULE_ID}-searched`;
 
 /**
  * @const {number} REPEAT_DEFAULT_VALUE
@@ -238,6 +240,10 @@ export default {
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
         },
 
+        /**
+         * @method search
+         * @fires SONG_VIEWER_EVENT_CLEARED
+         */
         search() {
             let pos = this.$refs.editor.selectionStart;
             let it0 = 0;
@@ -245,41 +251,60 @@ export default {
             let val = this.raw;
             let seek = '';
             let chord = '';
-            let beg = val.substring(0, pos).match(/(\[c="([^"]*))$/);
+            let beg = null;
             let end = null;
             let found = [];
             let stack = null;
 
+            // Try to find [c="...
+            beg = val.substring(0, pos).match(/(\[c="([^"]*))$/)
+
+            // If [c="... found
             if (beg) {
-                if (val.length > pos) {
-                    end = val.substring(pos).match(/([^"]*)"?\]?/);
+                seek = beg[2];
+
+                // Try to find ..."]
+                if (val.length - 1 > pos) {
+                    end = val.substring(pos).match(/^([^"]+)"+\]?/);
                 }
 
+                // If ..."] found
                 if (end) {
-                    seek = this.fixChord(`${beg[2]}${end[1]}`);
+                    seek += end[1];
                 }
+
+                // Compile search string
+                seek = this.fixChord(seek);
             }
 
+            // Clean previous results
             this.suggested = 0;
             this.$refs.suggest.innerHTML = '';
 
+            // Search
             if (seek) {
                 stack = Object.getOwnPropertyNames(this.chords);
                 found = [];
 
+                // Iterate through chords object
                 for (ln0 = stack.length; it0 < ln0; it0++) {
                     if (stack[it0].indexOf(seek) === 0) {
                         found.push(stack[it0]);
                     }
                 }
 
-                this.suggested = found.length;
-
+                // Order chords list
                 found.sort();
 
+                // Show suggest block
+                this.suggested = found.length;
+
+                // Render chords
                 for (it0 = 0, ln0 = found.length; it0 < ln0; it0++) {
                     this.parseChord(found[it0], this.$refs.suggest, true, true);
                 }
+
+                this.$emit(SONG_VIEWER_EVENT_SEARCHED, {seek, found});
             }
         },
 
@@ -337,7 +362,11 @@ export default {
             return chord;
         },
 
-        onCursorMove() {
+        /**
+         * @method onCursorMove
+         * @param {Event} event
+         */
+        onCursorMove(event) {
             this.search();
         },
 
