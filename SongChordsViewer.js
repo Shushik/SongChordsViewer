@@ -278,7 +278,7 @@ export default {
                 found.sort();
 
                 for (it0 = 0, ln0 = found.length; it0 < ln0; it0++) {
-                    this.parseChord(found[it0], this.$refs.suggest);
+                    this.parseChord(found[it0], this.$refs.suggest, true, true);
                 }
             }
         },
@@ -299,16 +299,21 @@ export default {
          * @param {string} raw
          * @param {HTMLElement} root
          * @param {boolean} titled
+         * @param {boolean} full
          * @returns {object}
          */
-        parseChord(raw, root, titled = true) {
+        parseChord(raw, root, titled = true, full = false) {
             let alias = this.fixChord(raw);
             let title = titled !== false && raw[0] != '{' ?
-                        raw.replace(/(_\S+)$/, '') :
+                        raw :
                         '';
             let chord = null;
 
             if (title) {
+                if (!full) {
+                    title = title.replace(/(_\S+)$/, '');
+                }
+
                 title = this.fixChord(title);
             }
 
