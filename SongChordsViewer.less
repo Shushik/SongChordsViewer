@@ -16,6 +16,7 @@
 @SONG_CHORDS_COMMA: ", ";
 @SONG_CHORDS_COLON: ": ";
 @SONG_CHORDS_ELIPSIS: "…";
+@SONG_CHORDS_ASTERISM: "* * *";
 
 .@{SONG_CHORDS_VIEWER}
 {
@@ -174,6 +175,11 @@
                 font-size: 1.5em;
 
                 margin-left: 2.5em;
+
+                &::before
+                {
+                    content: @SONG_CHORDS_ASTERISM;
+                }
             }
         }
     }
