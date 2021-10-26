@@ -262,7 +262,7 @@ export default {
                     chord = JSON.parse(raw.replace(
                         /(\{|, )([^:]+):/g,
                         '$1"$2":'
-                    ));
+                    ).replace(/:\s*-1/g, ':"×"'));
                 } catch(e) {}
             } else if (this.chords[alias]) {
                 chord = this.chords[alias];

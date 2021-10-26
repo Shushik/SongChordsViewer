@@ -34,6 +34,7 @@ export default {
             CHORD_ALIAS,
             SPACER_ALIAS,
 
+            titled: true,
             bridged: false,
             song: null
         };
@@ -45,9 +46,13 @@ export default {
             case VERSE_TYPE_CODA:
             case VERSE_TYPE_INTRO:
             case VERSE_TYPE_BRIDGE:
-                this.bridged = true;
+                this.bridged = false;
                 break;
 
+        }
+
+        if (this.value && this.value[0] == '{') {
+            this.titled = false;
         }
     },
 
