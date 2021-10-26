@@ -12,6 +12,8 @@
  */
 import ChordView from './libs/ChordView/ChordView.js';
 import SongChordsParser, {
+    BLOCKS_LIST,
+    INLINES_LIST,
     FLAT_REXP,
     FLAT_SYMBOL,
     BEKAR_SYMBOL,
@@ -22,6 +24,7 @@ import SongChordsParser, {
     REPEAT_ALIAS,
     SPACER_ALIAS,
     SPACER_SHORTCUT,
+    TITLE_ALIAS,
     VERSE_TYPE_CODA,
     VERSE_TYPE_NOTE,
     VERSE_TYPE_CHORUS,
@@ -61,33 +64,19 @@ export const SONG_VIEWER_EVENT_PARSE = `${MODULE_ID}-parse`;
 export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
 
+/**
+ * @const {number} REPEAT_DEFAULT_VALUE
+ */
 const REPEAT_DEFAULT_VALUE = 2;
+
+/**
+ * @const {number} SPACER_DEFAULT_VALUE
+ */
 const SPACER_DEFAULT_VALUE = 3;
 
-const BLOCKS_LIST = [
-    VERSE_TYPE_CODA,
-    VERSE_TYPE_NOTE,
-    VERSE_TYPE_CHORUS,
-    VERSE_TYPE_INTRO,
-    VERSE_TYPE_BRIDGE,
-    VERSE_TYPE_DEFAULT,
-    VERSE_TYPE_ASTERISM,
-    VERSE_TYPE_EPIGRAPH,
-    AUTHOR_TYPE_MUSIC,
-    AUTHOR_TYPE_LYRICS,
-    AUTHOR_TYPE_ARTIST,
-    AUTHOR_TYPE_DEFAULT,
-    AUTHOR_TYPE_TRANSLATION
-];
-
-const INLINES_LIST = [
-    CHORD_ALIAS,
-    CHORD_SHORTCUT,
-    REPEAT_ALIAS,
-    SPACER_ALIAS,
-    SPACER_SHORTCUT
-];
-
+/**
+ * @const {object} INLINES_VALUES
+ */
 const INLINES_VALUES = {
     [CHORD_ALIAS]: 'Am',
     [CHORD_SHORTCUT]: 'Em',
