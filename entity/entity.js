@@ -26,7 +26,6 @@ export default {
         'alone',
         'value',
         'verse'
-//         'bridged'
     ],
 
     data() {
@@ -46,7 +45,7 @@ export default {
             case VERSE_TYPE_CODA:
             case VERSE_TYPE_INTRO:
             case VERSE_TYPE_BRIDGE:
-                this.bridged = false;
+                this.bridged = true;
                 break;
 
         }

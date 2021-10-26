@@ -146,7 +146,9 @@ export default {
             INLINES_LIST,
             INLINES_VALUES,
 
+            processing: false,
             revision: 0,
+            suggested: 0,
             raw: '',
             song: null
         };
@@ -169,10 +171,11 @@ export default {
                 timer = null;
             }
 
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 this.revision++;
 
                 this.parse(val);
+                this.search();
             }, EDITOR_TIMER);
         }
 
@@ -235,6 +238,62 @@ export default {
             this.$emit(SONG_VIEWER_EVENT_PARSED, this.song);
         },
 
+        search() {
+            let pos = this.$refs.editor.selectionStart;
+            let it0 = 0;
+            let ln0 = 0;
+            let val = this.raw;
+            let seek = '';
+            let chord = '';
+            let beg = val.substring(0, pos).match(/(\[c="([^"]*))$/);
+            let end = null;
+            let found = [];
+            let stack = null;
+
+            if (beg) {
+                if (val.length > pos) {
+                    end = val.substring(pos).match(/([^"]*)"?\]?/);
+                }
+
+                if (end) {
+                    seek = this.fixChord(`${beg[2]}${end[1]}`);
+                }
+            }
+
+            this.suggested = 0;
+            this.$refs.suggest.innerHTML = '';
+
+            if (seek) {
+                stack = Object.getOwnPropertyNames(this.chords);
+                found = [];
+
+                for (ln0 = stack.length; it0 < ln0; it0++) {
+                    if (stack[it0].indexOf(seek) === 0) {
+                        found.push(stack[it0]);
+                    }
+                }
+
+                this.suggested = found.length;
+
+                found.sort();
+
+                for (it0 = 0, ln0 = found.length; it0 < ln0; it0++) {
+                    this.parseChord(found[it0], this.$refs.suggest);
+                }
+            }
+        },
+
+        /**
+         * @method fixChord
+         * @param {string} raw
+         * @returns {string}
+         */
+        fixChord(raw) {
+            return raw.
+                   replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
+                   replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
+        },
+
         /**
          * @method onEditorInput
          * @param {string} raw
@@ -243,26 +302,19 @@ export default {
          * @returns {object}
          */
         parseChord(raw, root, titled = true) {
-            let alias = raw.
-                        replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
-                        replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
+            let alias = this.fixChord(raw);
             let title = titled !== false && raw[0] != '{' ?
                         raw.replace(/(_\S+)$/, '') :
                         '';
             let chord = null;
 
             if (title) {
-                title = title.
-                        replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
-                        replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
+                title = this.fixChord(title);
             }
 
             if (raw[0] == '{') {
                 try {
-                    chord = JSON.parse(raw.replace(
-                        /(\{|, )([^:]+):/g,
-                        '$1"$2":'
-                    ));
+                    chord = JSON.parse(raw.replace(/(\{|, )([^:]+):/g, '$1"$2":'));
                 } catch(e) {}
             } else if (this.chords[alias]) {
                 chord = this.chords[alias];
@@ -280,6 +332,10 @@ export default {
             return chord;
         },
 
+        onCursorMove() {
+            this.search();
+        },
+
         /**
          * @method onEditorInput
          * @param {Event} event
@@ -294,6 +350,11 @@ export default {
          * @fires SONG_VIEWER_EVENT_CLEARED
          */
         onBridgeChordsFound(refs) {
+            // No need to go further
+            if (!refs) {
+                return;
+            }
+
             let al0 = '';
             let root = '';
 

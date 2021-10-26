@@ -17,6 +17,19 @@
 @SONG_CHORDS_COLON: ": ";
 @SONG_CHORDS_ELIPSIS: "…";
 @SONG_CHORDS_ASTERISM: "* * *";
+@SONG_CHORDS_ANIMATION_NAME: song-chords-processing;
+
+@keyframes @SONG_CHORDS_ANIMATION_NAME {
+    0%
+    {
+        background-position: 0 0;
+    }
+
+    100%
+    {
+        background-position: 50px 50px;
+    }
+}
 
 .@{SONG_CHORDS_VIEWER}
 {
@@ -24,6 +37,7 @@
     font-size: @SONG_CHORDS_FONT_SIZE;
 
     display: flex;
+    position: relative;
 
     width: 100%;
     min-height: 100%;
@@ -206,6 +220,7 @@
         display: flex;
         flex-direction: column;
         align-self: stretch;
+        position: relative;
 
         width: 32%;
         margin-right: 3%;
@@ -405,6 +420,22 @@
         }
     }
 
+    &__suggest
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+
+        max-height: 10em;
+        padding: @SONG_CHORDS_PADDING_S @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING;
+        overflow: auto;
+        box-sizing: border-box;
+
+        background-color: @SONG_CHORDS_BACKGROUND_EDITOR;
+        border-bottom: @SONG_CHORDS_BORDER_COLOR_MUTED solid 1px;
+    }
+
     &__textarea
     {
         font-size: 100%;
@@ -427,6 +458,38 @@
     &__copyright
     {
         margin-top: 1em;
+    }
+
+    &__processing
+    {
+        position: absolute;
+        right: 0;
+        left: 0;
+
+        height: 0.2em;
+
+        background-color: @SONG_CHORDS_BACKGROUND_COLOR;
+        border: @SONG_CHORDS_BORDER_COLOR_MUTED solid 1px;
+
+        &:before
+        {
+            content:  "";
+            display:  block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            overflow: hidden;
+
+            background-size: 50px 50px;
+            background-image: -webkit-linear-gradient(-45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, .1) 75%, transparent 75%, transparent);
+            background-image: -moz-linear-gradient(-45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, .1) 75%, transparent 75%, transparent);
+            background-image: linear-gradient(-45deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .1) 50%, rgba(0, 0, 0, .1) 75%, transparent 75%, transparent);
+
+            animation: @SONG_CHORDS_ANIMATION_NAME 2s linear infinite;
+        }
     }
 
     &_mode

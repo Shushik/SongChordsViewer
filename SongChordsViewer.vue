@@ -9,26 +9,44 @@
             v-if="editor"
             class="song__editor"
         >
-            <div class="song__editor-tags">
-                <span
-                    v-for="tag in BLOCKS_LIST"
-                    class="song__editor-tag"
-                >[{{ tag }}]…[/{{ tag }}]</span>
-            </div>
-            <div class="song__editor-tags">
-                <span
-                    v-for="tag in INLINES_LIST"
-                    class="song__editor-tag"
-                >
-                    [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]<template v-if="tag == REPEAT_ALIAS">…[/{{ tag }}]</template>
-                </span>
-            </div>
-            <div class="song__editor-input">
-                <textarea
-                    v-model="raw"
-                    class="song__textarea"
-                    :placeholder="$t('editor.placeholder')"
-                ></textarea>
+            <div
+                v-if="processing"
+                class="song__processing"
+            ></div>
+            <div
+                v-show="suggested"
+                ref="suggest"
+                class="song__suggest"
+            ></div>
+            <div class="song__editor-help">
+                <div class="song__editor-tags">
+                    <span
+                        v-for="tag in BLOCKS_LIST"
+                        class="song__editor-tag"
+                    >[{{ tag }}]…[/{{ tag }}]</span>
+                </div>
+                <div class="song__editor-tags">
+                    <span
+                        v-for="tag in INLINES_LIST"
+                        class="song__editor-tag"
+                    >
+                        [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]<template v-if="tag == REPEAT_ALIAS">…[/{{ tag }}]</template>
+                    </span>
+                </div>
+                <div class="song__editor-input">
+                    <textarea
+                        v-model="raw"
+                        ref="editor"
+                        class="song__textarea"
+                        :placeholder="$t('editor.placeholder')"
+                        @click="onCursorMove"
+                        @focus="onCursorMove"
+                        @keyup.up="onCursorMove"
+                        @keyup.right="onCursorMove"
+                        @keyup.down="onCursorMove"
+                        @keyup.left="onCursorMove"
+                    ></textarea>
+                </div>
             </div>
         </div>
         <div class="song__lyrics">
