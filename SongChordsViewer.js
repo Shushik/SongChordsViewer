@@ -37,7 +37,8 @@ import SongChordsParser, {
     AUTHOR_TYPE_LYRICS,
     AUTHOR_TYPE_ARTIST,
     AUTHOR_TYPE_DEFAULT,
-    AUTHOR_TYPE_TRANSLATION
+    AUTHOR_TYPE_TRANSLATION,
+    orderChords
 } from './libs/SongChordsParser/SongChordsParser.js';
 import SongChordsViewerEntity, {
     SONG_VIEWER_EVENT_CHORD_FOUND
@@ -106,6 +107,8 @@ const api = new SongChordsParser();
  * @var {object} timer
  */
 let timer = null;
+
+let chordId = 0;
 
 export default {
 
@@ -191,13 +194,21 @@ export default {
          */
         clear() {
             let root = this.$refs.chords;
+            let suggest = this.$refs.suggest;
 
+            // Clear model
             this.raw = '';
 
+            // Remove template vars
             this.song = null;
 
+            // Clear chords root node
             root.innerHTML = '';
 
+            // Clear suggest root node
+            suggest.innerHTML = '';
+
+            // Clear api
             api.clear();
 
             this.$emit(SONG_VIEWER_EVENT_CLEARED);
@@ -212,8 +223,13 @@ export default {
             let tune = this.tune || DEFAULT_TUNE;
             let root = this.$refs.chords;
 
+            // Clear common chords id
+            chordId = 0;
+
+            // Get a tree
             api.parse(raw);
 
+            // Get main sections
             let {
                 title,
                 chords,
@@ -221,6 +237,7 @@ export default {
                 authorsGroupedByType
             } = api;
 
+            // Save main sections for template
             this.song = {
                 tune: this.tune ? this.tune : DEFAULT_TUNE,
                 title: this.raw ? title : '',
@@ -229,8 +246,10 @@ export default {
                 authors: authorsGroupedByType
             };
 
+            // Clear chords root node
             root.innerHTML = '';
 
+            // Draw chords
             if (chords && chords.length && root && this.chords) {
                 this.song.chords = chords.map((item) => {
                     return this.parseChord(item, root);
@@ -294,7 +313,7 @@ export default {
                 }
 
                 // Order chords list
-                found.sort();
+                found.sort(orderChords);
 
                 // Show suggest block
                 this.suggested = found.length;
@@ -340,6 +359,9 @@ export default {
                 }
 
                 title = this.fixChord(title);
+            } else if (titled) {
+                chordId += 1;
+                title = `${chordId}`;
             }
 
             if (raw[0] == '{') {
