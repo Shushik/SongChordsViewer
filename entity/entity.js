@@ -73,6 +73,8 @@ export default {
             } else {
                 this.title = '';
             }
+        } else if (this.title) {
+            this.title = `${this.title}`.replace(/(_\S+)$/, '');
         }
     },
 

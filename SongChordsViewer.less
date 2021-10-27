@@ -10,6 +10,7 @@
 @SONG_CHORDS_BORDER_COLOR_MUTED: rgba(102, 102, 102, 0.5);
 @SONG_CHORDS_BORDER_COLOR_FIELDS: rgba(255, 192, 203, 0.9);
 @SONG_CHORDS_BORDER_COLOR_SQUARES: rgba(102, 102, 102, 0.08);
+@SONG_CHORDS_SHADOW_BASE: rgba(0, 0, 0, 0.3) 0px 0 10px;
 @SONG_CHORDS_PADDING: 10px;
 @SONG_CHORDS_PADDING_S: 5px;
 @SONG_CHORDS_PADDING_XS: 3px;
@@ -39,13 +40,18 @@
     display: flex;
 
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 
     color: @SONG_CHORDS_FONT_COLOR;
     background-color: @SONG_CHORDS_BACKGROUND_COLOR;
     background-size: 15px 15px;
     background-image: linear-gradient(to right, @SONG_CHORDS_BORDER_COLOR_SQUARES 1px, transparent 1px),
                       linear-gradient(to bottom, @SONG_CHORDS_BORDER_COLOR_SQUARES 1px, transparent 1px);
+    background-position: right top;
+    box-shadow: @SONG_CHORDS_SHADOW_BASE;
 
     &__chart
     {
@@ -281,6 +287,7 @@
 
         width: 75%;
         padding: @SONG_CHORDS_PADDING_S @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING_S 5em;
+        overflow: auto;
         box-sizing: border-box;
     }
 
@@ -451,7 +458,7 @@
 
         margin: 0;
         width: 100%;
-        height: 500px;
+        height: 100%;
         resize: none;
         box-sizing: border-box;
 
@@ -504,6 +511,8 @@
     {
         &_editor
         {
+            max-width: 1200px;
+
             .@{SONG_CHORDS_VIEWER}__lyrics
             {
                 width: 40%;
