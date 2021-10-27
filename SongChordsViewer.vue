@@ -23,14 +23,16 @@
                     <span
                         v-for="tag in BLOCKS_LIST"
                         class="song__editor-tag"
-                    >[{{ tag }}]…[/{{ tag }}]</span>
+                        @click="onBlockInsert(tag)"
+                    >[{{ tag }}]</span>
                 </div>
                 <div class="song__editor-tags">
                     <span
                         v-for="tag in INLINES_LIST"
                         class="song__editor-tag"
+                        @click="onInlineInsert(tag)"
                     >
-                        [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]<template v-if="tag == REPEAT_ALIAS">…[/{{ tag }}]</template>
+                        [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]
                     </span>
                 </div>
             </div>

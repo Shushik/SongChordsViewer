@@ -110,8 +110,6 @@ const api = new SongChordsParser();
  */
 let timer = null;
 
-let chordId = 0;
-
 export default {
 
     name: MODULE_ID,
@@ -224,9 +222,6 @@ export default {
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
             let root = this.$refs.chords;
-
-            // Clear common chords id
-            chordId = 0;
 
             // Get a tree
             api.parse(raw);
@@ -378,6 +373,85 @@ export default {
             }
 
             return chord;
+        },
+
+        /**
+         * @method insertBlock
+         * @param {string} tag
+         * @param {number} beg
+         * @param {number} end
+         */
+        insertBlock(tag, beg, end) {
+            let pos = beg + `[${tag}]`.length;
+            let str = this.raw.substring(beg, end);
+            let out = `[${tag}]${str}[/${tag}]`;
+
+            // Compile new value
+            out = this.raw.substring(0, beg) +
+                  `${out}` +
+                  this.raw.substring(end);
+
+            this.raw = out;
+
+            // Move cursor
+            setTimeout(() => {
+                this.$refs.editor.focus();
+                this.$refs.editor.setSelectionRange(pos, pos);
+            }, 0);
+        },
+
+        /**
+         * @method insertInline
+         * @param {string} tag
+         * @param {number} beg
+         */
+        insertInline(tag, beg, end) {
+            let pos = beg + `[${tag}="`.length;
+            let str = '';
+            let out = `[${tag}=""]`;
+
+            // Add endint tag for [repeat]
+            if (tag == REPEAT_ALIAS) {
+                str = this.raw.substring(beg, end)
+                out = `${out}${str}[/${tag}]`;
+            }
+
+            // Compile new value
+            out = this.raw.substring(0, beg) +
+                  `${out}` +
+                  this.raw.substring(tag == REPEAT_ALIAS ? end : beg);
+
+            this.raw = out;
+
+            // Move cursor
+            setTimeout(() => {
+                this.$refs.editor.focus();
+                this.$refs.editor.setSelectionRange(pos, pos);
+            }, 0);
+        },
+
+        /**
+         * @method onBlockInsert
+         * @param {string} tag
+         */
+        onBlockInsert(tag) {
+            this.insertBlock(
+                tag,
+                this.$refs.editor.selectionStart,
+                this.$refs.editor.selectionEnd
+            );
+        },
+
+        /**
+         * @method onInlineInsert
+         * @param {string} tag
+         */
+        onInlineInsert(tag) {
+            this.insertInline(
+                tag,
+                this.$refs.editor.selectionStart,
+                this.$refs.editor.selectionEnd
+            );
         },
 
         /**
