@@ -28,6 +28,10 @@ export default {
         'verse'
     ],
 
+    emits: [
+        SONG_VIEWER_EVENT_CHORD_FOUND
+    ],
+
     data() {
         return {
             CHORD_ALIAS,
