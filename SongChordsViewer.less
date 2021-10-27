@@ -37,7 +37,6 @@
     font-size: @SONG_CHORDS_FONT_SIZE;
 
     display: flex;
-    position: relative;
 
     width: 100%;
     min-height: 100%;
@@ -259,6 +258,11 @@
         }
     }
 
+    &__editor-help
+    {
+        position: relative;
+    }
+
     &__editor-input
     {
         flex-grow: 1;
@@ -425,10 +429,9 @@
         position: absolute;
         top: 0;
         right: 0;
+        bottom: 0;
         left: 0;
 
-        max-height: 10em;
-        padding: @SONG_CHORDS_PADDING_S @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING @SONG_CHORDS_PADDING;
         overflow: auto;
         box-sizing: border-box;
 

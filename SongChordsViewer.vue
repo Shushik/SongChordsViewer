@@ -13,12 +13,12 @@
                 v-if="processing"
                 class="song__processing"
             ></div>
-            <div
-                v-show="suggested"
-                ref="suggest"
-                class="song__suggest"
-            ></div>
             <div class="song__editor-help">
+                <div
+                    v-show="suggested"
+                    ref="suggest"
+                    class="song__suggest"
+                ></div>
                 <div class="song__editor-tags">
                     <span
                         v-for="tag in BLOCKS_LIST"
@@ -33,20 +33,20 @@
                         [{{ tag }}<template v-if="INLINES_VALUES[tag]">="{{ INLINES_VALUES[tag] }}"</template>]<template v-if="tag == REPEAT_ALIAS">…[/{{ tag }}]</template>
                     </span>
                 </div>
-                <div class="song__editor-input">
-                    <textarea
-                        v-model="raw"
-                        ref="editor"
-                        class="song__textarea"
-                        :placeholder="$t('editor.placeholder')"
-                        @click="onCursorMove"
-                        @focus="onCursorMove"
-                        @keyup.up="onCursorMove"
-                        @keyup.right="onCursorMove"
-                        @keyup.down="onCursorMove"
-                        @keyup.left="onCursorMove"
-                    ></textarea>
-                </div>
+            </div>
+            <div class="song__editor-input">
+                <textarea
+                    v-model="raw"
+                    ref="editor"
+                    class="song__textarea"
+                    :placeholder="$t('editor.placeholder')"
+                    @click="onCursorMove"
+                    @focus="onCursorMove"
+                    @keyup.up="onCursorMove"
+                    @keyup.right="onCursorMove"
+                    @keyup.down="onCursorMove"
+                    @keyup.left="onCursorMove"
+                ></textarea>
             </div>
         </div>
         <div class="song__lyrics">
