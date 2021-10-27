@@ -67,6 +67,8 @@ export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
 export const SONG_VIEWER_EVENT_SEARCHED = `${MODULE_ID}-searched`;
 
+const CHORD_CANVAS_CLASS = 'song__chart';
+
 /**
  * @const {number} REPEAT_DEFAULT_VALUE
  */
@@ -356,6 +358,7 @@ export default {
                     chord = JSON.parse(raw);
                     chord.root = root;
                     chord.tune = this.song.tune;
+                    chord.cname = CHORD_CANVAS_CLASS;
                 } catch(e) {}
             } else if (this.chords[alias]) {
                 title = titled ? alias : '';
@@ -365,6 +368,7 @@ export default {
                     root: root,
                     tune: this.song.tune,
                     chord: this.chords[alias],
+                    cname: CHORD_CANVAS_CLASS,
                     title
                 };
             }
