@@ -7,7 +7,7 @@
             'song__chord_is_alone': alone
         }"
     >
-        {{ !bridged && titled ? value : null }}
+        {{ !bridged && title ? title : null }}
     </span>
     <span
         v-else-if="!bridged && type == SPACER_ALIAS"

@@ -333,7 +333,7 @@ export default {
          * @returns {string}
          */
         fixChord(raw) {
-            return raw.
+            return `${raw}`.
                    replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
                    replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
         },
@@ -348,37 +348,29 @@ export default {
          */
         parseChord(raw, root, titled = true, full = false) {
             let alias = this.fixChord(raw);
-            let title = titled !== false && raw[0] != '{' ?
-                        raw :
-                        '';
+            let title = '';
             let chord = null;
-
-            if (title) {
-                if (!full) {
-                    title = title.replace(/(_\S+)$/, '');
-                }
-
-                title = this.fixChord(title);
-            } else if (titled) {
-                chordId += 1;
-                title = `${chordId}`;
-            }
 
             if (raw[0] == '{') {
                 try {
-                    chord = JSON.parse(raw.replace(/(\{|, )([^:]+):/g, '$1"$2":'));
+                    chord = JSON.parse(raw);
+                    chord.root = root;
+                    chord.tune = this.song.tune;
                 } catch(e) {}
             } else if (this.chords[alias]) {
-                chord = this.chords[alias];
+                title = titled ? alias : '';
+                title = !full ? title.replace(/(_\S+)$/, '') : title;
+
+                chord = {
+                    root: root,
+                    tune: this.song.tune,
+                    chord: this.chords[alias],
+                    title
+                };
             }
 
             if (chord) {
-                return new ChordView({
-                    root,
-                    tune: this.song.tune,
-                    title,
-                    chord
-                });
+                return new ChordView(chord);
             }
 
             return chord;
