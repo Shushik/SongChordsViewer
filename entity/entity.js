@@ -43,6 +43,7 @@ export default {
         let title = '';
         let found = null;
 
+        // For some verses types there's no need to show chord's name
         switch (this.verse) {
 
             case VERSE_TYPE_CODA:
@@ -54,7 +55,13 @@ export default {
 
         }
 
-        if (!this.bridged && this.type == CHORD_ALIAS && this.value && this.value[0] == '{') {
+        // Try to parse chord name
+        if (
+            !this.bridged &&
+            this.type == CHORD_ALIAS &&
+            this.value &&
+            this.value[0] == '{'
+        ) {
             found = this.value.match(/\{"title":"([^"]+)"/);
 
             if (found && found[1]) {
