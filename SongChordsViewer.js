@@ -478,9 +478,9 @@ export default {
             }
 
             // Compile new value
-            out = this.raw.substring(0, pos) +
+            out = val.substring(0, pos) +
                   `${alias}` +
-                  this.raw.substring(pos + str.length);
+                  val.substring(pos + str.length);
 
             this.raw = out;
 
@@ -498,16 +498,17 @@ export default {
          * @param {string} tag
          */
         insertBlock(tag) {
-            let end = this.$refs.editor.selectionStart;
-            let beg = this.$refs.editor.selectionEnd;
+            let beg = this.$refs.editor.selectionStart;
+            let end = this.$refs.editor.selectionEnd;
             let pos = beg + `[${tag}]`.length;
-            let str = this.raw.substring(beg, end);
+            let val = this.raw;
+            let str = val.substring(beg, end);
             let out = `[${tag}]${str}[/${tag}]`;
 
             // Compile new value
-            out = this.raw.substring(0, beg) +
+            out = val.substring(0, beg) +
                   `${out}` +
-                  this.raw.substring(end);
+                  val.substring(end);
 
             this.raw = out;
 
@@ -523,22 +524,23 @@ export default {
          * @param {string} tag
          */
         insertInline(tag) {
-            let end = this.$refs.editor.selectionStart;
-            let beg = this.$refs.editor.selectionEnd;
+            let beg = this.$refs.editor.selectionStart;
+            let end = this.$refs.editor.selectionEnd;
             let pos = beg + `[${tag}="`.length;
             let str = '';
             let out = `[${tag}=""]`;
+            let val = this.raw;
 
             // Add endint tag for [repeat]
             if (tag == REPEAT_ALIAS) {
-                str = this.raw.substring(beg, end)
+                str = val.substring(beg, end)
                 out = `${out}${str}[/${tag}]`;
             }
 
             // Compile new value
-            out = this.raw.substring(0, beg) +
+            out = val.substring(0, beg) +
                   `${out}` +
-                  this.raw.substring(tag == REPEAT_ALIAS ? end : beg);
+                  val.substring(tag == REPEAT_ALIAS ? end : beg);
 
             this.raw = out;
 
