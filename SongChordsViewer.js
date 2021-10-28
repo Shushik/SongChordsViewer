@@ -291,7 +291,6 @@ export default {
 
             // Get main sections
             let {
-                json,
                 title,
                 chords,
                 verses,
@@ -319,7 +318,6 @@ export default {
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, {
-                json,
                 title,
                 chords,
                 verses,
