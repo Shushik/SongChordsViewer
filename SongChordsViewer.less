@@ -38,6 +38,7 @@
     font-size: @SONG_CHORDS_FONT_SIZE;
 
     display: flex;
+    flex-wrap: wrap;
 
     width: 100%;
     height: 100%;
@@ -521,6 +522,46 @@
             .@{SONG_CHORDS_VIEWER}__lyrics
             {
                 width: 40%;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .@{SONG_CHORDS_VIEWER}
+    {
+        &,
+        &_mode_editor
+        {
+            width: auto;
+            height: auto;
+            min-height: 100%;
+
+            .@{SONG_CHORDS_VIEWER}__editor
+            {
+                width: 100%;
+                height: 250px;
+                margin-right: 0;
+
+                border-right-width: 0;
+                border-bottom: @SONG_CHORDS_BORDER_COLOR_MUTED solid 1px;
+            }
+
+            .@{SONG_CHORDS_VIEWER}__lyrics
+            {
+                width: 100%;
+                padding-top: 1em;
+                padding-bottom: 1em;
+            }
+
+            .@{SONG_CHORDS_VIEWER}__chords
+            {
+                width: 100%;
+                padding-top: 0.3em;
+                margin-left: 0;
+
+                border-top: @SONG_CHORDS_BORDER_COLOR_FIELDS solid 1px;
+                border-left-width: 0;
             }
         }
     }
