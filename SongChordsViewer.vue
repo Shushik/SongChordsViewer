@@ -18,6 +18,7 @@
                     v-show="suggested"
                     ref="suggest"
                     class="song__suggest"
+                    @click="onSuggestedChordClicked($event.target)"
                 ></div>
                 <div class="song__editor-tags">
                     <span
@@ -44,6 +45,7 @@
                     :placeholder="$t('editor.placeholder')"
                     @click="onCursorMove"
                     @focus="onCursorMove"
+                    @keyup.esc="onEscPressed"
                     @keyup.up="onCursorMove"
                     @keyup.right="onCursorMove"
                     @keyup.down="onCursorMove"
@@ -110,6 +112,7 @@
                                         :alone="slice.alone ? slice.alone : null"
                                         :value="slice.value ? slice.value : null"
                                         :verse="verse.type"
+                                        @click="onChordClick"
                                         @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                     />
                                 </template><br/>
@@ -126,6 +129,7 @@
                                     :alone="slice.alone ? slice.alone : null"
                                     :value="slice.value ? slice.value : null"
                                     :verse="verse.type"
+                                    @click="onChordClick"
                                     @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                 />
                             </template><br/>

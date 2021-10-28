@@ -67,7 +67,25 @@ export const SONG_VIEWER_EVENT_PARSED = `${MODULE_ID}-parsed`;
 export const SONG_VIEWER_EVENT_CLEARED = `${MODULE_ID}-cleared`;
 export const SONG_VIEWER_EVENT_SEARCHED = `${MODULE_ID}-searched`;
 
+/**
+ * @const {string} CHORD_CANVAS_CLASS
+ */
 const CHORD_CANVAS_CLASS = 'song__chart';
+
+/**
+ * @const {string} CHORD_ELEMENT_CLASS
+ */
+const CHORD_ELEMENT_CLASS = 'song__chord';
+
+/**
+ * @const {RegExp} CHORD_OPEN_REXP
+ */
+const CHORD_OPEN_REXP = /(\[c(hord)?="([^"]*))$/;
+
+/**
+ * @const {RegExp} CHORD_CLOSE_REXP
+ */
+const CHORD_CLOSE_REXP = /^([^"]+)"+\]?/;
 
 /**
  * @const {number} REPEAT_DEFAULT_VALUE
@@ -96,6 +114,27 @@ const INLINES_VALUES = {
 const DEFAULT_TUNE = ['E', 'B', 'G', 'D', 'A', 'E'];
 
 /**
+ * @const {Array<string>} DEFAULT_COLORS
+ */
+const DEFAULT_COLORS = [
+    '198172201',
+    '236180191',
+    '253214181',
+    '253243184',
+    '167228174',
+    '191255230',
+    '134153209',
+    '219169206',
+    '170231232',
+    '239230235',
+    '71209213',
+    '232210255',
+    '193209253',
+    '217224252',
+    '255224241'
+];
+
+/**
  * @const {number} EDITOR_TIMER
  */
 const EDITOR_TIMER = 300;
@@ -118,7 +157,8 @@ export default {
         'text',
         'tune',
         'chords',
-        'editor'
+        'editor',
+        'colors'
     ],
 
     emits: [
@@ -186,6 +226,26 @@ export default {
 
     },
 
+    computed: {
+
+        currentMarkColor() {
+            let loop = this.colors.loop;
+            let color = this.colors.list[loop];
+            let r = color.substring(0, 2);
+            let g = color.substring(3, 5);
+            let b = color.substring(6);
+
+            if (loop == this.colors.list.length - 1) {
+                this.colors.loop = 0;
+            } else {
+                this.colors.loop++;
+            }
+
+            return {r, g, b};
+        }
+
+    },
+
     methods: {
 
         /**
@@ -222,6 +282,9 @@ export default {
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
             let root = this.$refs.chords;
+            let colors = this.colors instanceof Array ?
+                         this.colors :
+                         DEFAULT_COLORS;
 
             // Get a tree
             api.parse(raw);
@@ -236,10 +299,11 @@ export default {
 
             // Save main sections for template
             this.song = {
-                tune: this.tune ? this.tune : DEFAULT_TUNE,
+                tune,
                 title: this.raw ? title : '',
-                chords: chords,
-                verses: verses,
+                chords: {loop: 0, list: colors},
+                colors,
+                verses,
                 authors: authorsGroupedByType
             };
 
@@ -273,15 +337,15 @@ export default {
             let stack = null;
 
             // Try to find [c="...
-            beg = val.substring(0, pos).match(/(\[c="([^"]*))$/)
+            beg = val.substring(0, pos).match(CHORD_OPEN_REXP);
 
             // If [c="... found
             if (beg) {
-                seek = beg[2];
+                seek = beg[3];
 
                 // Try to find ..."]
                 if (val.length - 1 > pos) {
-                    end = val.substring(pos).match(/^([^"]+)"+\]?/);
+                    end = val.substring(pos).match(CHORD_CLOSE_REXP);
                 }
 
                 // If ..."] found
@@ -354,6 +418,8 @@ export default {
                     chord.root = root;
                     chord.tune = this.song.tune;
                     chord.cname = CHORD_CANVAS_CLASS;
+
+                    alias = chord.title;
                 } catch(e) {}
             } else if (this.chords[alias]) {
                 title = titled ? alias : '';
@@ -369,6 +435,10 @@ export default {
             }
 
             if (chord) {
+                if (titled) {
+                    chord.data = {alias: alias};
+                }
+
                 return new ChordView(chord);
             }
 
@@ -376,12 +446,60 @@ export default {
         },
 
         /**
+         * @method insertChord
+         * @param {string} alias
+         */
+        insertChord(alias) {
+            let pos = this.$refs.editor.selectionStart;
+            let val = this.raw;
+            let out = '';
+            let str = '';
+            let beg = null;
+            let end = null;
+
+            // Try to find [c="...
+            beg = val.substring(0, pos).match(CHORD_OPEN_REXP);
+
+            // If [c="... found
+            if (beg) {
+                str = beg[3];
+
+                // Try to find ..."]
+                if (val.length - 1 > pos) {
+                    end = val.substring(pos).match(CHORD_CLOSE_REXP);
+                }
+
+                pos -= str.length;
+
+                // If ..."] found
+                if (end) {
+                    str += end[1];
+                }
+            }
+
+            // Compile new value
+            out = this.raw.substring(0, pos) +
+                  `${alias}` +
+                  this.raw.substring(pos + str.length);
+
+            this.raw = out;
+
+            pos += alias.length;
+
+            // Move cursor
+            setTimeout(() => {
+                this.$refs.editor.focus();
+                this.$refs.editor.setSelectionRange(pos, pos);
+            }, 0);
+        },
+
+        /**
          * @method insertBlock
          * @param {string} tag
-         * @param {number} beg
-         * @param {number} end
          */
-        insertBlock(tag, beg, end) {
+        insertBlock(tag) {
+            let end = this.$refs.editor.selectionStart;
+            let beg = this.$refs.editor.selectionEnd;
             let pos = beg + `[${tag}]`.length;
             let str = this.raw.substring(beg, end);
             let out = `[${tag}]${str}[/${tag}]`;
@@ -403,9 +521,10 @@ export default {
         /**
          * @method insertInline
          * @param {string} tag
-         * @param {number} beg
          */
-        insertInline(tag, beg, end) {
+        insertInline(tag) {
+            let end = this.$refs.editor.selectionStart;
+            let beg = this.$refs.editor.selectionEnd;
             let pos = beg + `[${tag}="`.length;
             let str = '';
             let out = `[${tag}=""]`;
@@ -431,15 +550,20 @@ export default {
         },
 
         /**
+         * @method hideSuggest
+         */
+        hideSuggest() {
+            if (this.suggested) {
+                this.suggested = 0;
+            }
+        },
+
+        /**
          * @method onBlockInsert
          * @param {string} tag
          */
         onBlockInsert(tag) {
-            this.insertBlock(
-                tag,
-                this.$refs.editor.selectionStart,
-                this.$refs.editor.selectionEnd
-            );
+            this.insertBlock(tag);
         },
 
         /**
@@ -447,11 +571,22 @@ export default {
          * @param {string} tag
          */
         onInlineInsert(tag) {
-            this.insertInline(
-                tag,
-                this.$refs.editor.selectionStart,
-                this.$refs.editor.selectionEnd
-            );
+            this.insertInline(tag);
+        },
+
+        /**
+         * @method onChordClick
+         * @param {Event} event
+         */
+        onChordClick(event) {
+        },
+
+        /**
+         * @method onEscPressed
+         * @param {Event} event
+         */
+        onEscPressed(event) {
+            this.hideSuggest();
         },
 
         /**
@@ -491,6 +626,14 @@ export default {
 
                 this.parseChord(al0, root, false);
             }
+        },
+
+        onSuggestedChordClicked(element) {
+            if (!element.classList.contains(CHORD_CANVAS_CLASS)) {
+                return;
+            }
+
+            this.insertChord(element.getAttribute('data-alias'));
         },
 
         [SONG_VIEWER_EVENT_CLEAR]() {
