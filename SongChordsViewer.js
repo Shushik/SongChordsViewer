@@ -22,6 +22,7 @@ import SongChordsParser, {
     CHORD_ALIAS,
     CHORD_SHORTCUT,
     REPEAT_ALIAS,
+    REPEAT_SHORTCUT,
     SPACER_ALIAS,
     SPACER_SHORTCUT,
     TITLE_ALIAS,
@@ -113,7 +114,8 @@ const SPACER_DEFAULT_VALUE = 3;
 const INLINES_VALUES = {
     [CHORD_ALIAS]: 'Am',
     [CHORD_SHORTCUT]: 'Em',
-    [REPEAT_ALIAS]: REPEAT_DEFAULT_VALUE,
+    [REPEAT_ALIAS]: 0,
+    [REPEAT_SHORTCUT]: REPEAT_DEFAULT_VALUE,
     [SPACER_ALIAS]: 0,
     [SPACER_SHORTCUT]: SPACER_DEFAULT_VALUE
 }
@@ -186,6 +188,7 @@ export default {
         return {
             CHORD_ALIAS,
             REPEAT_ALIAS,
+            REPEAT_SHORTCUT,
             SPACER_ALIAS,
             VERSE_TYPE_NOTE,
             VERSE_TYPE_CHORUS,

@@ -14,7 +14,7 @@
         v-else-if="!bridged && type == SPACER_ALIAS"
         class="song__space"
         :style="{
-            width: value * 5 + 'px'
+            width: value * 0.5 + 'em'
         }"
     ></span>
     <span v-else>
