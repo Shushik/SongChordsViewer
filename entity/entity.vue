@@ -6,6 +6,7 @@
         :class="{
             'song__chord_is_alone': alone
         }"
+        :data-alias="!bridged ? alias : null"
     >
         {{ !bridged && title ? title : null }}
     </span>

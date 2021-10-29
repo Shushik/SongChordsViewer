@@ -73,9 +73,19 @@ export const SONG_VIEWER_EVENT_SEARCHED = `${MODULE_ID}-searched`;
 const CHORD_CANVAS_CLASS = 'song__chart';
 
 /**
+ * @const {string} CHORD_CANVAS_HIGHLIGHTED_CLASS
+ */
+const CHORD_CANVAS_HIGHLIGHTED_CLASS = 'song__chart_is_highlighted';
+
+/**
  * @const {string} CHORD_ELEMENT_CLASS
  */
 const CHORD_ELEMENT_CLASS = 'song__chord';
+
+/**
+ * @const {string} CHORDS_ELEMENT_CLASS
+ */
+const CHORDS_ELEMENT_CLASS = 'song__chords';
 
 /**
  * @const {RegExp} CHORD_OPEN_REXP
@@ -127,7 +137,7 @@ const DEFAULT_COLORS = [
     '219169206',
     '170231232',
     '239230235',
-    '71209213',
+    '071209213',
     '232210255',
     '193209253',
     '217224252',
@@ -226,26 +236,6 @@ export default {
 
     },
 
-    computed: {
-
-        currentMarkColor() {
-            let loop = this.colors.loop;
-            let color = this.colors.list[loop];
-            let r = color.substring(0, 2);
-            let g = color.substring(3, 5);
-            let b = color.substring(6);
-
-            if (loop == this.colors.list.length - 1) {
-                this.colors.loop = 0;
-            } else {
-                this.colors.loop++;
-            }
-
-            return {r, g, b};
-        }
-
-    },
-
     methods: {
 
         /**
@@ -301,8 +291,8 @@ export default {
             this.song = {
                 tune,
                 title: this.raw ? title : '',
-                chords: {loop: 0, list: colors},
-                colors,
+                chords,
+                colors: {loop: 0, list: colors},
                 verses,
                 authors: authorsGroupedByType
             };
@@ -499,6 +489,52 @@ export default {
         },
 
         /**
+         * @method highlightChord
+         * @param {string} alias
+         */
+        highlightChord(alias) {
+            // No need to go further
+            if (!alias) {
+                return;
+            }
+
+            let loop = 0;
+            let b = '';
+            let g = '';
+            let r = '';
+            let seek = `.${CHORDS_ELEMENT_CLASS} .${CHORD_CANVAS_CLASS}[data-alias="${alias}"]`;
+            let color = '';
+            let node = this.$refs.chords.
+                       querySelector(seek);
+
+            // No need to go further
+            if (!node) {
+                return;
+            }
+
+            if (node.classList.contains(CHORD_CANVAS_HIGHLIGHTED_CLASS)) {
+                node.classList.remove(CHORD_CANVAS_HIGHLIGHTED_CLASS);
+                node.style.backgroundImage = '';
+            } else {
+                loop = this.song.colors.loop;
+                color = this.song.colors.list[loop];
+                b = color.substring(6);
+                g = color.substring(3, 5);
+                r = color.substring(0, 2);
+
+                node.classList.add(CHORD_CANVAS_HIGHLIGHTED_CLASS);
+//                 node.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.4)`;
+                node.style.backgroundImage = `linear-gradient(-90deg, rgba(255, 255, 255, 0), rgba(${r}, ${g}, ${b}, 0.4) 100%, rgba(255, 255, 255, 0))`;
+
+                loop++;
+
+                this.song.colors.loop = loop == this.song.colors.list.length ?
+                                        0 :
+                                        loop;
+            }
+        },
+
+        /**
          * @method insertBlock
          * @param {string} tag
          */
@@ -586,6 +622,12 @@ export default {
          * @param {Event} event
          */
         onChordClick(event) {
+            let alias = '';
+            let node = event.target;
+
+            if (node && node.classList.contains(CHORD_ELEMENT_CLASS)) {
+                this.highlightChord(node.getAttribute('data-alias'));
+            }
         },
 
         /**

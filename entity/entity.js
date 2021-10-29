@@ -39,6 +39,7 @@ export default {
 
             bridged: false,
             title: this.value,
+            alias: this.value,
             song: null
         };
     },

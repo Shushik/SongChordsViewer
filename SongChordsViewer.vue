@@ -112,7 +112,7 @@
                                         :alone="slice.alone ? slice.alone : null"
                                         :value="slice.value ? slice.value : null"
                                         :verse="verse.type"
-                                        @click="onChordClick"
+                                        @click="!editor ? onChordClick : null"
                                         @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                     />
                                 </template><br/>
@@ -129,7 +129,7 @@
                                     :alone="slice.alone ? slice.alone : null"
                                     :value="slice.value ? slice.value : null"
                                     :verse="verse.type"
-                                    @click="onChordClick"
+                                    @click="!editor ? onChordClick : null"
                                     @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                 />
                             </template><br/>
