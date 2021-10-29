@@ -236,6 +236,9 @@ export default {
 
     },
 
+    computed: {
+    },
+
     methods: {
 
         /**
@@ -381,6 +384,22 @@ export default {
 
                 this.$emit(SONG_VIEWER_EVENT_SEARCHED, {seek, found});
             }
+        },
+
+        /**
+         * @method getAsJSON
+         * @returns {string}
+         */
+        getAsJSON() {
+            return api.json;
+        },
+
+        /**
+         * @method getAsObject
+         * @returns {object}
+         */
+        getAsObject() {
+            return api.parsed;
         },
 
         /**
