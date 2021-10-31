@@ -15,12 +15,25 @@ const MODULE_ID = 'song-chords-viewer-chart';
 /**
  * @const {string} CHORD_INSERTION_SIGN
  */
-const CHORD_INSERTION_SIGN = '{';
+export const CHORD_INSERTION_SIGN = '{';
 
 /**
  * @const {RegExp} CHORD_TITLE_REST_REXP
  */
 const CHORD_TITLE_REST_REXP = /(_\S+)$/;
+
+/**
+ * @function isInsertion
+ * @param {string} alias
+ * @returns {string}
+ */
+export function isInsertion(alias) {
+    if (`${alias}`.indexOf(CHORD_INSERTION_SIGN) != -1) {
+        return true;
+    }
+
+    return false;
+}
 
 /**
  * @function fixChord

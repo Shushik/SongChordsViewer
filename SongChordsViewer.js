@@ -43,7 +43,8 @@ import SongChordsParser, {
 } from './libs/SongChordsParser/SongChordsParser.js';
 import SongChordsViewerEntity from './entity/entity.vue';
 import SongChordsViewerChart, {
-    fixChord
+    fixChord,
+    isInsertion
 } from './chart/chart.vue';
 
 /**
@@ -354,26 +355,35 @@ export default {
                 if (end) {
                     seek += end[1];
                 }
-
-                // Compile search string
-                seek = fixChord(seek);
             }
 
             // Clean previous results
             this.suggestedChords = null;
 
             // Search
-            if (seek) {
+            if (isInsertion(seek)) {
+                seek = seek.replace(
+                           /(\d|barre|active|inactive|open|mute)(:)/g,
+                           '"$1"$2'
+                       );
+                seek = `{"title":"","chord":${seek}}`;
+                found = [{active: false, alias: seek}];
+            } else if (seek) {
+                // Compile search string
+                seek = fixChord(seek);
+
                 stack = Object.getOwnPropertyNames(this.chords);
                 found = [];
 
                 // Iterate through chords object
                 for (ln0 = stack.length; it0 < ln0; it0++) {
                     if (stack[it0].indexOf(seek) === 0) {
-                        found.push(stack[it0]);
+                        found.push({active: true, alias: stack[it0]});
                     }
                 }
+            }
 
+            if (found.length) {
                 // Order chords list
                 found.sort(orderChords);
 
