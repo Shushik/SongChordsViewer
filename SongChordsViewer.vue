@@ -9,17 +9,20 @@
             v-if="editor"
             class="song__editor"
         >
-            <div
-                v-if="processing"
-                class="song__processing"
-            ></div>
             <div class="song__editor-help">
                 <div
-                    v-show="suggested"
-                    ref="suggest"
+                    v-show="song && suggestedChords"
                     class="song__suggest"
-                    @click="onSuggestedChordClicked($event.target)"
-                ></div>
+                >
+                    <song-chords-viewer-chart
+                        v-for="chord in suggestedChords"
+                        :key="'song-chords-viewer-chart-' + revision"
+                        :tune="song.tune"
+                        :alias="chord"
+                        :chords="chords"
+                        @click="onSuggestedChordClicked(chord)"
+                    />
+                </div>
                 <div class="song__editor-tags">
                     <span
                         v-for="tag in BLOCKS_LIST"
@@ -108,12 +111,13 @@
                                 <template v-for="slice in subline">
                                     <song-chords-viewer-entity
                                         :text="!slice.type ? slice : null"
+                                        :tune="song.tune"
                                         :type="slice.type ? slice.type : null"
                                         :alone="slice.alone ? slice.alone : null"
+                                        :chords="chords"
                                         :value="slice.value ? slice.value : null"
                                         :verse="verse.type"
                                         @click="!editor ? onChordClick : null"
-                                        @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                     />
                                 </template><br/>
                             </template>
@@ -125,12 +129,13 @@
                             >
                                 <song-chords-viewer-entity
                                     :text="!slice.type ? slice : null"
+                                    :tune="song.tune"
                                     :type="slice.type ? slice.type : null"
                                     :alone="slice.alone ? slice.alone : null"
+                                    :chords="chords"
                                     :value="slice.value ? slice.value : null"
                                     :verse="verse.type"
                                     @click="!editor ? onChordClick : null"
-                                    @[SONG_VIEWER_EVENT_CHORD_FOUND]="onBridgeChordsFound"
                                 />
                             </template><br/>
                         </template>
@@ -141,7 +146,17 @@
         <div
             ref="chords"
             class="song__chords"
-        ></div>
+        >
+            <template v-if="song && usedChords">
+                <song-chords-viewer-chart
+                    v-for="chord in usedChords"
+                    :key="'song-chords-viewer-chart-' + revision"
+                    :tune="song.tune"
+                    :alias="chord"
+                    :chords="chords"
+                />
+            </template>
+        </div>
     </div>
 </template>
 <script src="./SongChordsViewer.js"></script>

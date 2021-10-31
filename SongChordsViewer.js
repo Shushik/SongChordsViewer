@@ -41,9 +41,10 @@ import SongChordsParser, {
     AUTHOR_TYPE_TRANSLATION,
     orderChords
 } from './libs/SongChordsParser/SongChordsParser.js';
-import SongChordsViewerEntity, {
-    SONG_VIEWER_EVENT_CHORD_FOUND
-} from './entity/entity.vue';
+import SongChordsViewerEntity from './entity/entity.vue';
+import SongChordsViewerChart, {
+    fixChord
+} from './chart/chart.vue';
 
 /**
  * @const {object} messages
@@ -179,6 +180,7 @@ export default {
     ],
 
     components: {
+        SongChordsViewerChart,
         SongChordsViewerEntity
     },
 
@@ -198,17 +200,17 @@ export default {
             AUTHOR_TYPE_DEFAULT,
             SONG_VIEWER_EVENT_CLEAR,
             SONG_VIEWER_EVENT_PARSE,
-            SONG_VIEWER_EVENT_CHORD_FOUND,
 
             BLOCKS_LIST,
             INLINES_LIST,
             INLINES_VALUES,
 
-            processing: false,
             revision: 0,
             suggested: 0,
             raw: '',
-            song: null
+            song: null,
+            usedChords: null,
+            suggestedChords: null
         };
     },
 
@@ -258,6 +260,9 @@ export default {
             // Remove template vars
             this.song = null;
 
+            // 
+            this.usedChords = null;
+
             // Clear chords root node
             root.innerHTML = '';
 
@@ -277,7 +282,6 @@ export default {
          */
         parse(raw = '') {
             let tune = this.tune || DEFAULT_TUNE;
-            let root = this.$refs.chords;
             let colors = this.colors instanceof Array ?
                          this.colors :
                          DEFAULT_COLORS;
@@ -303,14 +307,11 @@ export default {
                 authors: authorsGroupedByType
             };
 
-            // Clear chords root node
-            root.innerHTML = '';
-
             // Draw chords
             if (chords && chords.length && root && this.chords) {
-                this.song.chords = chords.map((item) => {
-                    return this.parseChord(item, root);
-                });
+                this.usedChords = chords;
+            } else {
+                this.usedChords = null;
             }
 
             this.$emit(SONG_VIEWER_EVENT_PARSED, {
@@ -355,12 +356,11 @@ export default {
                 }
 
                 // Compile search string
-                seek = this.fixChord(seek);
+                seek = fixChord(seek);
             }
 
             // Clean previous results
-            this.suggested = 0;
-            this.$refs.suggest.innerHTML = '';
+            this.suggestedChords = null;
 
             // Search
             if (seek) {
@@ -377,13 +377,7 @@ export default {
                 // Order chords list
                 found.sort(orderChords);
 
-                // Show suggest block
-                this.suggested = found.length;
-
-                // Render chords
-                for (it0 = 0, ln0 = found.length; it0 < ln0; it0++) {
-                    this.parseChord(found[it0], this.$refs.suggest, true, true);
-                }
+                this.suggestedChords = found.length ? found : null;
 
                 this.$emit(SONG_VIEWER_EVENT_SEARCHED, {seek, found});
             }
@@ -403,63 +397,6 @@ export default {
          */
         getAsObject() {
             return api.parsed;
-        },
-
-        /**
-         * @method fixChord
-         * @param {string} raw
-         * @returns {string}
-         */
-        fixChord(raw) {
-            return `${raw}`.
-                   replace(SHARP_REXP, `$1${SHARP_SYMBOL}`).
-                   replace(FLAT_REXP, `$1${FLAT_SYMBOL}`);
-        },
-
-        /**
-         * @method onEditorInput
-         * @param {string} raw
-         * @param {HTMLElement} root
-         * @param {boolean} titled
-         * @param {boolean} full
-         * @returns {object}
-         */
-        parseChord(raw, root, titled = true, full = false) {
-            let alias = this.fixChord(raw);
-            let title = '';
-            let chord = null;
-
-            if (raw[0] == '{') {
-                try {
-                    chord = JSON.parse(raw);
-                    chord.root = root;
-                    chord.tune = this.song.tune;
-                    chord.cname = CHORD_CANVAS_CLASS;
-
-                    alias = chord.title;
-                } catch(e) {}
-            } else if (this.chords[alias]) {
-                title = titled ? alias : '';
-                title = !full ? title.replace(/(_\S+)$/, '') : title;
-
-                chord = {
-                    root: root,
-                    tune: this.song.tune,
-                    chord: this.chords[alias],
-                    cname: CHORD_CANVAS_CLASS,
-                    title
-                };
-            }
-
-            if (chord) {
-                if (titled) {
-                    chord.data = {alias: alias};
-                }
-
-                return new ChordView(chord);
-            }
-
-            return chord;
         },
 
         /**
@@ -514,6 +451,7 @@ export default {
          * @method highlightChord
          * @param {string} alias
          */
+/*
         highlightChord(alias) {
             // No need to go further
             if (!alias) {
@@ -555,6 +493,7 @@ export default {
                                         loop;
             }
         },
+*/
 
         /**
          * @method insertBlock
@@ -699,12 +638,8 @@ export default {
             }
         },
 
-        onSuggestedChordClicked(element) {
-            if (!element.classList.contains(CHORD_CANVAS_CLASS)) {
-                return;
-            }
-
-            this.insertChord(element.getAttribute('data-alias'));
+        onSuggestedChordClicked(alias) {
+            this.insertChord(alias);
         },
 
         [SONG_VIEWER_EVENT_CLEAR]() {

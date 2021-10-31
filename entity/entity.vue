@@ -1,6 +1,13 @@
 <template>
+    <song-chords-viewer-chart
+        v-if="bridged && type == CHORD_ALIAS"
+        :tune="tune"
+        :alias="alias"
+        :chords="chords"
+        :titled="false"
+    />
     <span
-        v-if="type == CHORD_ALIAS"
+        v-else-if="type == CHORD_ALIAS"
         class="song__chord"
         :ref="bridged ? value : null"
         :class="{

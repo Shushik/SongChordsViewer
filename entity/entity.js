@@ -5,16 +5,14 @@ import {
     VERSE_TYPE_INTRO,
     VERSE_TYPE_BRIDGE
 } from '../libs/SongChordsParser/SongChordsParser.js';
+import SongChordsViewerChart, {
+    fixChord
+} from '../chart/chart.vue';
 
 /**
  * @const {string} MODULE_ID
  */
 const MODULE_ID = 'song-chords-viewer-entity';
-
-/**
- * @const {string} SONG_VIEWER_EVENT_CHORD_FOUND
- */
-export const SONG_VIEWER_EVENT_CHORD_FOUND = `${MODULE_ID}-chord-found`;
 
 export default {
 
@@ -22,15 +20,17 @@ export default {
 
     props: [
         'text',
+        'tune',
         'type',
         'alone',
         'value',
-        'verse'
+        'verse',
+        'chords'
     ],
 
-    emits: [
-        SONG_VIEWER_EVENT_CHORD_FOUND
-    ],
+    components: {
+        SongChordsViewerChart
+    },
 
     data() {
         return {
@@ -61,29 +61,8 @@ export default {
         }
 
         // Try to parse chord name
-        if (
-            !this.bridged &&
-            this.type == CHORD_ALIAS &&
-            this.value &&
-            this.value[0] == '{'
-        ) {
-            found = this.value.match(/\{"title":"([^"]+)"/);
-
-            if (found && found[1]) {
-                this.title = found[1];
-            } else {
-                this.title = '';
-            }
-        } else if (this.title) {
-            this.title = `${this.title}`.replace(/(_\S+)$/, '');
-        }
-    },
-
-    mounted() {
-        if (this.bridged) {
-            setTimeout(() => {
-                this.$emit(SONG_VIEWER_EVENT_CHORD_FOUND, this.$refs);
-            }, 0);
+        if (!this.bridged && this.type == CHORD_ALIAS) {
+            this.title = fixChord(this.title);
         }
     }
 
