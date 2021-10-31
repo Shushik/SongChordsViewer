@@ -357,9 +357,6 @@ export default {
                 }
             }
 
-            // Clean previous results
-            this.suggestedChords = null;
-
             // Search
             if (isInsertion(seek)) {
                 seek = seek.replace(
@@ -390,6 +387,9 @@ export default {
                 this.suggestedChords = found.length ? found : null;
 
                 this.$emit(SONG_VIEWER_EVENT_SEARCHED, {seek, found});
+            } else {
+                // Clean previous results
+                this.suggestedChords = null;
             }
         },
 

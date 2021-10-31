@@ -20,7 +20,7 @@
                         :tune="song.tune"
                         :alias="chord.alias"
                         :chords="chords"
-                        @click="chord.active > 1 ? onSuggestedChordClicked(chord.alias) : null"
+                        @click="chord.active ? onSuggestedChordClicked(chord.alias) : null"
                     />
                 </div>
                 <div class="song__editor-tags">
