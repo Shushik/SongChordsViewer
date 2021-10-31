@@ -118,7 +118,7 @@ const INLINES_VALUES = {
     [REPEAT_SHORTCUT]: REPEAT_DEFAULT_VALUE,
     [SPACER_ALIAS]: 0,
     [SPACER_SHORTCUT]: SPACER_DEFAULT_VALUE
-}
+};
 
 /**
  * @const {Array<string>} DEFAULT_TUNE
@@ -595,7 +595,7 @@ export default {
             let val = this.raw;
 
             // Add endint tag for [repeat]
-            if (tag == REPEAT_ALIAS) {
+            if (tag == REPEAT_ALIAS || tag == REPEAT_SHORTCUT) {
                 str = val.substring(beg, end)
                 out = `${out}${str}[/${tag}]`;
             }
