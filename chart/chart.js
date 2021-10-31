@@ -24,7 +24,8 @@ const CHORD_TITLE_REST_REXP = /(_\S+)$/;
 
 /**
  * @function fixChord
- * @param {string} raw
+ * @param {string} alias
+ * @param {boolean} full
  * @returns {string}
  */
 export function fixChord(alias, full = false) {
@@ -71,14 +72,6 @@ export function parseChord(alias, tune, chords, titled = true, full = false) {
             title
         };
     }
-
-/*
-    if (chord && chord.title) {
-        chord.title = !full && chord.title ?
-                      chord.title.replace(CHORD_TITLE_REST_REXP, '') :
-                      chord.title;
-    }
-*/
 
     return chord;
 }
