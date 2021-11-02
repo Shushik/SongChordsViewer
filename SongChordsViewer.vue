@@ -16,11 +16,12 @@
                 >
                     <song-chords-viewer-chart
                         v-for="chord in suggestedChords"
-                        :key="'song-chords-viewer-chart-' + revision + chord.alias"
+                        :key="'song-chords-viewer-chart-' + revision + chord"
+                        :full="true"
                         :tune="song.tune"
-                        :alias="chord.alias"
+                        :alias="chord"
                         :chords="chords"
-                        @click="chord.active ? onSuggestedChordClicked(chord.alias) : null"
+                        @click="onSuggestedChordClicked(chord)"
                     />
                 </div>
                 <div class="song__editor-tags">

@@ -364,7 +364,7 @@ export default {
                            '"$1"$2'
                        );
                 seek = `{"title":"","chord":${seek}}`;
-                found = [{active: false, alias: seek}];
+                found = [seek];
             } else if (seek) {
                 // Compile search string
                 seek = fixChord(seek);
@@ -375,14 +375,14 @@ export default {
                 // Iterate through chords object
                 for (ln0 = stack.length; it0 < ln0; it0++) {
                     if (stack[it0].indexOf(seek) === 0) {
-                        found.push({active: true, alias: stack[it0]});
+                        found.push(stack[it0]);
                     }
                 }
             }
 
             if (found.length) {
                 // Order chords list
-                found.sort(orderChords);
+                found = found.sort(orderChords);
 
                 this.suggestedChords = found.length ? found : null;
 
@@ -625,30 +625,12 @@ export default {
             this.parse(this.raw);
         },
 
-        /**
-         * @method onBridgeChordsFound
-         * @param {object} refs
-         * @fires SONG_VIEWER_EVENT_CLEARED
-         */
-        onBridgeChordsFound(refs) {
+        onSuggestedChordClicked(alias) {
             // No need to go further
-            if (!refs) {
+            if (isInsertion(alias)) {
                 return;
             }
 
-            let al0 = '';
-            let root = '';
-
-            for (al0 in refs) {
-                root = refs[al0];
-
-                root.innerHTML = '';
-
-                this.parseChord(al0, root, false);
-            }
-        },
-
-        onSuggestedChordClicked(alias) {
             this.insertChord(alias);
         },
 
