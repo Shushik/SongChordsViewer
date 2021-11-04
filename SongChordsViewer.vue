@@ -43,7 +43,7 @@
             </div>
             <div class="song__editor-input">
                 <textarea
-                    v-model="raw"
+                    v-model.trim="raw"
                     ref="editor"
                     class="song__textarea"
                     :placeholder="$t('editor.placeholder')"
