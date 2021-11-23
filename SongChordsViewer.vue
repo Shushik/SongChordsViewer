@@ -49,11 +49,11 @@
                     :placeholder="$t('editor.placeholder')"
                     @click="onCursorMove"
                     @focus="onCursorMove"
-                    @keyup.esc="onEscPressed"
-                    @keyup.up="onCursorMove"
-                    @keyup.right="onCursorMove"
-                    @keyup.down="onCursorMove"
-                    @keyup.left="onCursorMove"
+                    @keydown.esc="onEscPressed"
+                    @keydown.up="onCursorMove"
+                    @keydown.right="onCursorMove"
+                    @keydown.down="onCursorMove"
+                    @keydown.left="onCursorMove"
                 ></textarea>
             </div>
         </div>
